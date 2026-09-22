@@ -1,0 +1,724 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Flashcards · DIP NP1 · UNIP 2026</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --primary: #1e293b;
+      --primary-hover: #0f172a;
+      --primary-light: #f1f5f9;
+      --accent: #0369a1;
+      --accent-light: #e0f2fe;
+      --danger: #dc2626;
+      --danger-light: #fef2f2;
+      --amber: #d97706;
+      --amber-bg: #fffbeb;
+      --rose: #e11d48;
+      --rose-bg: #fff1f2;
+      --blue: #0284c7;
+      --blue-bg: #f0f9ff;
+      --bg: #f8fafc;
+      --card-bg: #ffffff;
+      --text: #0f172a;
+      --text-muted: #64748b;
+      --text-dim: #94a3b8;
+      --border: #e2e8f0;
+      --shadow: 0 10px 30px -5px rgba(0,0,0,0.05), 0 4px 12px -2px rgba(0,0,0,0.02);
+      --shadow-hover: 0 20px 35px -10px rgba(0,0,0,0.08);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', system-ui, -apple-system, sans-serif; -webkit-tap-highlight-color: transparent; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    /* ── Header ── */
+    header {
+      background: rgba(255,255,255,0.85);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      padding: 12px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      z-index: 50;
+      height: 60px;
+    }
+
+    .header-brand { display: flex; align-items: center; gap: 10px; }
+    .brand-text h1 { font-size: 14px; font-weight: 700; color: var(--text); letter-spacing: -0.2px; }
+    .brand-text p { font-size: 11px; font-weight: 500; color: var(--text-muted); }
+
+    .header-controls { display: flex; align-items: center; gap: 12px; }
+
+    .progress-pill {
+      background: #f1f5f9;
+      color: var(--text-muted);
+      font-size: 12px;
+      font-weight: 700;
+      padding: 6px 12px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+    }
+
+    /* ── Main ── */
+    main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* ── Start Screen ── */
+    #start-screen {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      text-align: center;
+      background: radial-gradient(circle at center, #ffffff 0%, var(--bg) 100%);
+    }
+
+    .hero-title { font-size: 28px; font-weight: 800; color: var(--text); margin-bottom: 8px; letter-spacing: -0.5px; }
+    .hero-subtitle { font-size: 15px; color: var(--text-muted); max-width: 520px; margin-bottom: 28px; line-height: 1.5; }
+
+    .hero-stats { display: flex; gap: 16px; margin-bottom: 32px; flex-wrap: wrap; justify-content: center; }
+    .stat-card { background: white; border: 1px solid var(--border); padding: 12px 20px; border-radius: 12px; box-shadow: 0 2px 4px rgba(0,0,0,0.02); }
+    .stat-val { font-size: 20px; font-weight: 800; color: #0f172a; }
+    .stat-lbl { font-size: 11px; color: var(--text-muted); font-weight: 600; text-transform: uppercase; }
+
+    .btn-hero {
+      background: #0f172a;
+      color: #ffffff;
+      border: 1px solid #0f172a;
+      padding: 14px 32px;
+      font-size: 15px;
+      font-weight: 600;
+      border-radius: 10px;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(15,23,42,0.15);
+      transition: all 0.2s;
+    }
+    .btn-hero:hover { background: #1e293b; border-color: #1e293b; transform: translateY(-1px); }
+
+    /* ── Carousel ── */
+    #carousel-container {
+      flex: 1;
+      display: none;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .carousel-track {
+      display: flex;
+      height: 100%;
+      transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .slide {
+      min-width: 100%;
+      height: 100%;
+      padding: 20px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow-y: auto;
+    }
+
+    /* ── 3D Flip Card ── */
+    .card-container {
+      width: 100%;
+      max-width: 720px;
+      height: 100%;
+      max-height: 640px;
+      perspective: 1200px;
+    }
+
+    .card-inner {
+      width: 100%;
+      height: 100%;
+      position: relative;
+      transform-style: preserve-3d;
+      transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .card-inner.flipped { transform: rotateY(180deg); }
+
+    .q-face {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
+      border-radius: 20px;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+      display: flex;
+      flex-direction: column;
+      padding: 24px;
+      overflow-y: auto;
+    }
+
+    .q-back { transform: rotateY(180deg); background: #fafafa; }
+
+    /* ── Front Face ── */
+    .q-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .q-meta { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+
+    .q-num {
+      background: var(--primary-light);
+      color: var(--primary);
+      font-weight: 800;
+      font-size: 12px;
+      padding: 4px 8px;
+      border-radius: 6px;
+    }
+
+    .q-aula-badge {
+      background: #e0f2fe;
+      color: #0369a1;
+      border: 1px solid #7dd3fc;
+      font-weight: 700;
+      border-radius: 6px;
+      padding: 3px 8px;
+      font-size: 11px;
+    }
+
+    .q-topic { font-size: 12px; font-weight: 600; color: var(--text-muted); }
+
+    .timer-badge {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text-dim);
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .timer-badge.warning { color: var(--rose); font-weight: 800; }
+
+    .timer-bar-container {
+      width: 100%;
+      height: 4px;
+      background: var(--border);
+      border-radius: 2px;
+      margin-bottom: 14px;
+      overflow: hidden;
+    }
+
+    .timer-bar {
+      height: 100%;
+      background: #0369a1;
+      width: 100%;
+      transition: width 1s linear, background-color 0.3s;
+    }
+    .timer-bar.warning { background: var(--rose); }
+
+    .q-stem {
+      font-size: 14px;
+      line-height: 1.65;
+      color: var(--text);
+      margin-bottom: 20px;
+      font-weight: 400;
+      flex: 1;
+    }
+
+    .btn-revelar {
+      background: var(--primary);
+      color: white;
+      border: none;
+      border-radius: 10px;
+      padding: 12px 20px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.15s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+    .btn-revelar:hover { background: var(--primary-hover); }
+
+    /* ── Back Face ── */
+    .gab-badge {
+      display: inline-block;
+      font-weight: 800;
+      font-size: 13px;
+      padding: 8px 14px;
+      border-radius: 8px;
+      margin-bottom: 12px;
+      align-self: flex-start;
+      background: #ecfdf5;
+      color: #047857;
+      border: 1px solid #a7f3d0;
+    }
+
+    .back-section {
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 12px 14px;
+      margin-bottom: 10px;
+      font-size: 13px;
+      line-height: 1.55;
+      color: #334155;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+    }
+
+    .back-section.teacher { border-left: 3px solid #059669; background: #faf8f5; }
+    .back-section.logica  { border-left: 3px solid #0284c7; background: #f0f9ff; }
+    .back-section.legal   { border-left: 3px solid #1e293b; background: #f8fafc; }
+    .back-section.dica    { border-left: 3px solid #dc2626; background: #fff5f5; }
+
+    .back-section-title {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      color: #0f172a;
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .back-section p { margin-bottom: 6px; }
+    .back-section p:last-child { margin-bottom: 0; }
+    .back-section strong { color: #0f172a; }
+
+    .flip-hint {
+      font-size: 11px;
+      color: var(--text-dim);
+      text-align: center;
+      margin-top: auto;
+      padding-top: 10px;
+      border-top: 1px dashed var(--border);
+      font-weight: 500;
+    }
+
+    /* ── Footer Nav ── */
+    footer {
+      background: white;
+      border-top: 1px solid var(--border);
+      padding: 12px 20px;
+      display: none;
+      align-items: center;
+      justify-content: space-between;
+      height: 64px;
+      z-index: 50;
+    }
+
+    .nav-btn {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 10px 18px;
+      border-radius: 10px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.15s;
+    }
+    .nav-btn:hover:not(:disabled) { background: var(--primary-light); color: var(--primary); border-color: var(--primary); }
+    .nav-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+    .nav-btn.primary { background: #0f172a; color: #ffffff; border: 1px solid #0f172a; font-weight: 600; box-shadow: 0 2px 6px rgba(15,23,42,0.1); }
+    .nav-btn.primary:hover:not(:disabled) { background: #1e293b; border-color: #1e293b; }
+
+    .score-indicator { font-size: 13px; font-weight: 700; color: var(--text-muted); }
+
+    /* ── Result Screen ── */
+    #result-screen {
+      display: none;
+      flex: 1;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      text-align: center;
+    }
+
+    .result-card {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: 40px;
+      max-width: 480px;
+      width: 100%;
+      box-shadow: var(--shadow);
+    }
+
+    @media (max-width: 640px) {
+      .slide { padding: 10px; }
+      .q-face { padding: 16px; }
+      .hero-title { font-size: 22px; }
+      .hero-stats { flex-direction: column; gap: 8px; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="header-brand">
+    <a href="index.html" style="display:flex;align-items:center;justify-content:center;width:34px;height:34px;background:#f1f5f9;border:1px solid #cbd5e1;border-radius:99px;color:#0f172a;text-decoration:none;transition:all 0.2s;margin-right:2px;" onmouseover="this.style.background='#e2e8f0'" onmouseout="this.style.background='#f1f5f9'">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+    </a>
+    <div class="brand-text">
+      <h1>Flashcards · DIP NP1</h1>
+      <p>André L. da Silva · Dir. Internacional Privado · UNIP 2026</p>
+    </div>
+  </div>
+  <div class="header-controls">
+    <span class="progress-pill" id="progress-text" style="display:none">1 / 5</span>
+  </div>
+</header>
+
+<main>
+
+  <!-- Start Screen -->
+  <div id="start-screen">
+    <div class="hero-title">Exercícios DIP</div>
+    <div class="hero-stats">
+      <div class="stat-card"><div class="stat-val">5</div><div class="stat-lbl">Questões</div></div>
+      <div class="stat-card"><div class="stat-val">3 min</div><div class="stat-lbl">Por questão</div></div>
+      <div class="stat-card"><div class="stat-val">NP1</div><div class="stat-lbl">LINDB · CPC · CF</div></div>
+    </div>
+    <button class="btn-hero" id="btn-start" onclick="startQuiz()">Iniciar Exercícios</button>
+  </div>
+
+  <!-- Carousel -->
+  <div id="carousel-container">
+    <div class="carousel-track" id="carousel-track"></div>
+  </div>
+
+  <!-- Result Screen -->
+  <div id="result-screen">
+    <div class="result-card">
+      <div style="font-size:40px;margin-bottom:16px;">✓</div>
+      <h2 style="font-size:22px;font-weight:800;margin-bottom:8px;">Revisão concluída!</h2>
+      <p style="color:var(--text-muted);margin-bottom:28px;">Você passou pelos 5 casos práticos de DIP.</p>
+      <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
+        <button class="nav-btn primary" onclick="resetQuiz()">Refazer</button>
+        <a href="index.html" class="nav-btn">← Voltar ao Portal</a>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<footer id="quiz-footer">
+  <button class="nav-btn" id="btn-prev" onclick="prevQuestion()" disabled>← Anterior</button>
+  <span class="score-indicator" id="score-display"></span>
+  <button class="nav-btn primary" id="btn-next" onclick="nextQuestion()">Avançar →</button>
+</footer>
+
+<script>
+  const questionsData = [
+    {
+      aula: "Aula 1",
+      tema: "LINDB art. 7 · Estatuto Pessoal",
+      enunciado: `<p>Em janeiro de 2003, Martin e Clarisse Green, cidadãos britânicos domiciliados no Rio de Janeiro, casam-se no consulado geral britânico, na Praia do Flamengo. Em meados de 2010, decidem se divorciar. Sem pacto antenupcial, Clarisse requer metade dos bens adquiridos, alegando que o regime vigente no Brasil é o da comunhão parcial. Martin contesta, argumentando que o casamento foi realizado no consulado britânico e, portanto, deve ser aplicado o regime legal de bens do Reino Unido.</p><br><p><strong>Com base na LINDB, qual dos nubentes está correto? Explique.</strong></p>`,
+      sintese: `<p><strong>Clarisse está correta.</strong> Martin confunde celebração (lei do local/nacionalidade) com regime de bens (lei do domicílio). O consulado britânico é válido para as formalidades, mas o patrimônio segue a lei do domicílio conjugal: Brasil → comunhão parcial de bens.</p>`,
+      fundamentacao: `<p><strong>LINDB art. 7, §2:</strong> nubentes estrangeiros → podem casar perante autoridade consular do seu país (formalidades = lei da nacionalidade).<br><strong>LINDB art. 7, §4:</strong> regime de bens = lei do domicílio dos nubentes. Domicílio = Rio de Janeiro → lei brasileira.<br>Sem pacto antenupcial → regime legal = comunhão parcial de bens.</p>`,
+      dica: `<p>Celebração ≠ regime de bens. São regras de conexão distintas. O <strong>consulado</strong> só vale para a <em>forma</em> do ato. O <strong>domicílio</strong> determina o regime patrimonial. Distrator clássico: confundir local do casamento com lei dos bens.</p>`
+    },
+    {
+      aula: "Aula 2",
+      tema: "LINDB arts. 8–10 · Bens, Obrigações, Sucessão",
+      enunciado: `<p>Carlos, empresário brasileiro domiciliado em São Paulo, firmou contrato de compra e venda com empresa alemã, em Berlim. O contrato prevê entrega da mercadoria no Brasil. Surge conflito sobre a forma de pagamento. A empresa alemã sustenta que a lei alemã rege o contrato; Carlos sustenta que a lei brasileira se aplica porque a execução ocorre no Brasil.</p><br><p><strong>Qual lei rege a obrigação? Justifique com base na LINDB.</strong></p>`,
+      sintese: `<p>Em regra, <strong>lei do local da constituição da obrigação</strong> (Berlim → lei alemã). Porém, para a <em>forma essencial</em> dos atos executados no Brasil, a lei brasileira é imperativa (§1º). Não é mudança da lei aplicável ao fundo — é limitação de forma.</p>`,
+      fundamentacao: `<p><strong>LINDB art. 9, caput:</strong> obrigações → lei do local onde foram constituídas (lex loci contractus = Berlim = lei alemã).<br><strong>LINDB art. 9, §1º:</strong> quando a execução se opera no Brasil, a forma essencial exigida pela lei brasileira é imperativa.<br><strong>LINDB art. 9, §2º:</strong> contrato entre ausentes → lei da residência do proponente.</p>`,
+      dica: `<p>A regra é o local de constituição (art. 9 caput). O §1º cria uma <em>exceção de forma</em> para execução no BR — não muda a lei do fundo. Cuidado: Carlos está certo que a execução é no BR, mas errado em achar que muda a lei do contrato. Lei alemã rege o fundo; lei brasileira rege a forma essencial da execução.</p>`
+    },
+    {
+      aula: "Aula 3",
+      tema: "CPC arts. 21–25 · Competência Internacional",
+      enunciado: `<p>João e Maria, ambos brasileiros, possuem imóvel em São Paulo. João está domiciliado nos EUA e ingressa com ação no tribunal americano requerendo a partilha do imóvel situado no Brasil.</p><br><p><strong>O tribunal americano tem competência para julgar? Justifique com base no CPC.</strong></p>`,
+      sintese: `<p><strong>Não.</strong> Trata-se de competência <em>exclusiva</em> da autoridade judiciária brasileira (CPC art. 23, I). Ações sobre imóveis situados no Brasil cabem apenas à JB, com exclusão de qualquer outra. Eleição de foro estrangeiro não derroga competência exclusiva.</p>`,
+      fundamentacao: `<p><strong>CPC art. 23, I:</strong> exclusiva para ações relativas a imóveis situados no território nacional.<br><strong>CPC art. 25, §1º:</strong> a eleição de foro estrangeiro não se aplica quando a matéria for de competência exclusiva brasileira.<br><strong>CPC art. 964:</strong> o STJ recusará homologação de sentença estrangeira sobre matéria de competência exclusiva brasileira.</p>`,
+      dica: `<p>Art. 23 = <strong>exclusiva</strong> (imóvel BR, inventário de bens no BR, divórcio com bens no BR). Art. 21–22 = <strong>concorrente</strong>. Regra de ouro: competência exclusiva não pode ser derrogada por foro estrangeiro, cláusula contratual ou convenção das partes.</p>`
+    },
+    {
+      aula: "Aula 4",
+      tema: "Cooperação Jurídica Internacional · HSE",
+      enunciado: `<p>Um tribunal japonês proferiu sentença condenando uma empresa brasileira ao pagamento de indenização a um cidadão japonês. A empresa tem bens no Brasil. O credor deseja executar a sentença no Brasil.</p><br><p><strong>Qual o procedimento correto? Quais os requisitos para que a sentença japonesa produza efeitos no Brasil?</strong></p>`,
+      sintese: `<p>Procedimento: <strong>Homologação de Sentença Estrangeira (HSE)</strong> perante o STJ. O STJ faz apenas <em>juízo de delibação</em> (analisa a forma, não o mérito). Homologada, a sentença é executada na Justiça Federal.</p>`,
+      fundamentacao: `<p><strong>CF art. 105, I, i + EC 45/2004:</strong> competência do STJ para homologar sentenças estrangeiras.<br><strong>CPC art. 963:</strong> requisitos: (1) juiz competente; (2) partes notificadas regularmente ou revelia reconhecida; (3) trânsito em julgado + tradução juramentada; (4) não contraria ordem pública, soberania e bons costumes (LINDB art. 17).<br><strong>CPC art. 964:</strong> recusa se houver competência exclusiva brasileira.<br><strong>CPC art. 965:</strong> execução na Justiça Federal.</p>`,
+      dica: `<p>STJ = homologa (juízo de delibação = só verifica forma, não reexamina mérito). JF = executa. <strong>Exceção:</strong> divórcio consensual no exterior dispensa HSE (CPC art. 961, §5º) — basta tradução juramentada + averbação. Essa exceção cai muito.</p>`
+    },
+    {
+      aula: "Aula 5",
+      tema: "Nacionalidade · CF art. 12 · EC 131/2023",
+      enunciado: `<p>Analise os três casos e determine a situação quanto à nacionalidade brasileira:</p><br>
+      <p><strong>Caso 1 — Pedro:</strong> nasceu no Brasil. Pai e mãe são portugueses domiciliados no Brasil, sem vínculo com o serviço de Portugal.</p><br>
+      <p><strong>Caso 2 — Robert:</strong> filho de John e Mary, diplomatas dos EUA em missão oficial na embaixada americana em Brasília. Robert nasceu no Brasil durante essa missão.</p><br>
+      <p><strong>Caso 3 — Sofia:</strong> nasceu em Buenos Aires (Argentina). Pai brasileiro trabalhava em empresa privada na Argentina. A família veio ao Brasil quando Sofia tinha 10 anos. Sofia tem agora 22 anos.</p>`,
+      sintese: `<p><strong>Pedro:</strong> brasileiro nato (jus soli — pais não a serviço de Portugal).<br><strong>Robert:</strong> não é nato — exceção do art. 12, I, a (pais estrangeiros a serviço do seu país excluem o jus soli).<br><strong>Sofia:</strong> pode ser nata, mas precisa exercer a opção confirmatória perante a JF (art. 12, I, c + art. 109, X).</p>`,
+      fundamentacao: `<p><strong>CF art. 12, I, a:</strong> nato = nascido no BR, desde que os pais estrangeiros não estejam a serviço de seu país.<br><strong>CF art. 12, I, b:</strong> nato = nascido no ext., pai/mãe BR a serviço do Brasil.<br><strong>CF art. 12, I, c:</strong> nato = nascido no ext., pai/mãe BR, residente no BR + opção após maioridade.<br><strong>CF art. 109, X:</strong> JF processa a opção de nacionalidade.<br><strong>EC 131/2023:</strong> revogou perda automática por dupla nacionalidade → hoje exige pedido expresso (art. 12, §4º, II).</p>`,
+      dica: `<p>Jus soli (nascimento no BR) tem 1 exceção: pais estrangeiros a serviço de seu país. Jus sanguinis (pai/mãe BR no exterior) tem 2 caminhos: a serviço do Brasil (alínea b, automático) ou não a serviço + residência + opção (alínea c, requer ato formal). EC 131/2023: dupla cidadania é permitida.</p>`
+    }
+  ];
+
+  let currentIndex = 0;
+  let timers = questionsData.map(() => 180);
+  let timerIntervals = questionsData.map(() => null);
+  let paused = questionsData.map(() => false);
+  let revealed = questionsData.map(() => false);
+
+  function initCarousel() {
+    const track = document.getElementById('carousel-track');
+    track.innerHTML = '';
+    questionsData.forEach((q, i) => {
+      const slide = document.createElement('div');
+      slide.className = 'slide';
+      slide.innerHTML = buildSlide(q, i);
+      track.appendChild(slide);
+    });
+    updateNav();
+  }
+
+  function buildSlide(q, i) {
+    return `
+      <div class="card-container">
+        <div class="card-inner" id="card-inner-${i}">
+
+          <!-- Frente: enunciado -->
+          <div class="q-face">
+            <div class="q-header">
+              <div class="q-meta">
+                <span class="q-num">Caso ${i + 1} / ${questionsData.length}</span>
+                <span class="q-aula-badge">${q.aula}</span>
+                <span class="q-topic">${q.tema}</span>
+              </div>
+              <div class="timer-badge" id="timer-badge-${i}">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                <span id="timer-text-${i}">3:00</span>
+                <button id="pause-btn-${i}" onclick="togglePause(${i})" style="background:none;border:none;cursor:pointer;padding:0 3px;line-height:1;font-size:13px;color:inherit;" title="Pausar/Retomar">&#9646;&#9646;</button>
+              </div>
+            </div>
+            <div class="timer-bar-container">
+              <div class="timer-bar" id="timer-bar-${i}"></div>
+            </div>
+            <div class="q-stem">${q.enunciado}</div>
+            <button class="btn-revelar" onclick="revelar(${i})">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+              Ver resposta
+            </button>
+          </div>
+
+          <!-- Verso: resposta -->
+          <div class="q-face q-back" onclick="unflip(${i})">
+            <div class="gab-badge">✓ RESPOSTA FUNDAMENTADA</div>
+
+            <div class="back-section teacher">
+              <div class="back-section-title">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
+                SÍNTESE
+              </div>
+              ${q.sintese}
+            </div>
+
+            <div class="back-section legal">
+              <div class="back-section-title">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v18M3 9l9-6 9 6M3 9l3 6m0 0a3 3 0 0 0 6 0m-6 0h6m3-6l3 6m0 0a3 3 0 0 1-6 0m6 0h-6"></path></svg>
+                FUNDAMENTAÇÃO JURÍDICA
+              </div>
+              ${q.fundamentacao}
+            </div>
+
+            <div class="back-section dica">
+              <div class="back-section-title">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+                DICA DE PROVA
+              </div>
+              ${q.dica}
+            </div>
+
+            <div class="flip-hint">Toque no card para voltar à pergunta</div>
+          </div>
+
+        </div>
+      </div>
+    `;
+  }
+
+  let quizStarted = false;
+
+  function startQuiz() {
+    if (!quizStarted) {
+      // primeira vez: reinicia estado e monta carousel
+      currentIndex = 0;
+      timers = questionsData.map(() => 180);
+      timerIntervals.forEach(t => clearInterval(t));
+      timerIntervals = questionsData.map(() => null);
+      paused = questionsData.map(() => false);
+      revealed = questionsData.map(() => false);
+      initCarousel();
+      quizStarted = true;
+    }
+    document.getElementById('start-screen').style.display = 'none';
+    document.getElementById('result-screen').style.display = 'none';
+    document.getElementById('carousel-container').style.display = 'block';
+    document.getElementById('quiz-footer').style.display = 'flex';
+    document.getElementById('progress-text').style.display = '';
+    history.pushState({ quiz: true }, '');
+    startTimer(currentIndex);
+  }
+
+  function resetQuiz() {
+    quizStarted = false;
+    startQuiz();
+  }
+
+  function fmtTime(s) {
+    return Math.floor(s / 60) + ':' + String(s % 60).padStart(2, '0');
+  }
+
+  function startTimer(index) {
+    if (timerIntervals[index] || paused[index]) return;
+    timerIntervals[index] = setInterval(() => {
+      if (timers[index] > 0) {
+        timers[index]--;
+        const textEl = document.getElementById(`timer-text-${index}`);
+        const barEl  = document.getElementById(`timer-bar-${index}`);
+        const badgeEl = document.getElementById(`timer-badge-${index}`);
+        if (textEl) textEl.innerText = fmtTime(timers[index]);
+        if (barEl) {
+          barEl.style.width = `${(timers[index] / 180) * 100}%`;
+          if (timers[index] <= 30) { barEl.classList.add('warning'); if (badgeEl) badgeEl.classList.add('warning'); }
+        }
+      } else {
+        clearInterval(timerIntervals[index]);
+        timerIntervals[index] = null;
+        // tempo esgotado → vira o card
+        flipCard(index);
+      }
+    }, 1000);
+  }
+
+  function pauseTimer(index) {
+    if (timerIntervals[index]) { clearInterval(timerIntervals[index]); timerIntervals[index] = null; }
+  }
+
+  function togglePause(index) {
+    paused[index] = !paused[index];
+    const btn = document.getElementById(`pause-btn-${index}`);
+    const badgeEl = document.getElementById(`timer-badge-${index}`);
+    if (paused[index]) {
+      clearInterval(timerIntervals[index]); timerIntervals[index] = null;
+      if (btn) btn.innerHTML = '&#9654;';
+      if (badgeEl) badgeEl.style.opacity = '0.55';
+    } else {
+      if (btn) btn.innerHTML = '&#9646;&#9646;';
+      if (badgeEl) badgeEl.style.opacity = '1';
+      startTimer(index);
+    }
+  }
+
+  function revelar(index) {
+    revealed[index] = true;
+    pauseTimer(index);
+    flipCard(index);
+  }
+
+  function flipCard(index) {
+    const inner = document.getElementById(`card-inner-${index}`);
+    if (inner) inner.classList.add('flipped');
+  }
+
+  function unflip(index) {
+    const inner = document.getElementById(`card-inner-${index}`);
+    if (inner) inner.classList.remove('flipped');
+  }
+
+  function updateNav() {
+    const track = document.getElementById('carousel-track');
+    track.style.transform = `translateX(-${currentIndex * 100}%)`;
+    document.getElementById('btn-prev').disabled = (currentIndex === 0);
+    document.getElementById('progress-text').innerText = `${currentIndex + 1} / ${questionsData.length}`;
+    const btnNext = document.getElementById('btn-next');
+    btnNext.innerText = currentIndex === questionsData.length - 1 ? 'Finalizar ✓' : 'Avançar →';
+    startTimer(currentIndex);
+  }
+
+  function nextQuestion() {
+    pauseTimer(currentIndex);
+    if (currentIndex < questionsData.length - 1) {
+      currentIndex++;
+      updateNav();
+    } else {
+      showResults();
+    }
+  }
+
+  function prevQuestion() {
+    if (currentIndex > 0) {
+      pauseTimer(currentIndex);
+      currentIndex--;
+      updateNav();
+    }
+  }
+
+  function showResults() {
+    timerIntervals.forEach(t => clearInterval(t));
+    document.getElementById('carousel-container').style.display = 'none';
+    document.getElementById('quiz-footer').style.display = 'none';
+    document.getElementById('result-screen').style.display = 'flex';
+    document.getElementById('progress-text').style.display = 'none';
+    quizStarted = false;
+  }
+
+  // botão voltar do browser: retorna ao quiz se estava nele
+  window.addEventListener('popstate', () => {
+    if (quizStarted) {
+      // já estava no quiz — volta para a tela do quiz
+      document.getElementById('start-screen').style.display = 'none';
+      document.getElementById('carousel-container').style.display = 'block';
+      document.getElementById('quiz-footer').style.display = 'flex';
+      history.pushState({ quiz: true }, '');
+    } else {
+      // quiz não iniciado — mostra start screen
+      document.getElementById('carousel-container').style.display = 'none';
+      document.getElementById('quiz-footer').style.display = 'none';
+      document.getElementById('result-screen').style.display = 'none';
+      document.getElementById('start-screen').style.display = 'flex';
+      document.getElementById('progress-text').style.display = 'none';
+      // botão vira "Continuar" se o carousel já existe
+      const btn = document.getElementById('btn-start');
+      if (btn && document.getElementById('carousel-track').children.length > 0) {
+        btn.textContent = 'Continuar Exercícios';
+        quizStarted = true;
+      }
+    }
+  });
+</script>
+
+</body>
+</html>
