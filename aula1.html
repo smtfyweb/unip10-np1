@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Aula 1 · LINDB e Regras de Conexão · DIP NP1</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #1e293b; --primary-hover: #0f172a; --primary-light: #f1f5f9;
+      --accent: #059669; --accent-light: #ecfdf5;
+      --danger: #dc2626; --danger-light: #fef2f2;
+      --amber: #d97706; --amber-bg: #fffbeb;
+      --rose: #e11d48; --rose-bg: #fff1f2;
+      --blue: #0284c7; --blue-bg: #f0f9ff;
+      --bg: #f8fafc; --card-bg: #ffffff;
+      --text: #0f172a; --text-muted: #64748b; --text-dim: #94a3b8;
+      --border: #e2e8f0;
+      --shadow: 0 10px 30px -5px rgba(0,0,0,0.05), 0 4px 12px -2px rgba(0,0,0,0.02);
+      --shadow-hover: 0 20px 35px -10px rgba(0,0,0,0.08);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0;
+        font-family: 'Inter', system-ui, -apple-system, sans-serif;
+        -webkit-tap-highlight-color: transparent; }
+    body { background: var(--bg); color: var(--text); display: flex; flex-direction: column; min-height: 100vh; }
+    header {
+      background: rgba(255,255,255,0.85); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border); padding: 12px 20px;
+      display: flex; align-items: center; justify-content: space-between;
+      z-index: 50; height: 60px; position: sticky; top: 0;
+    }
+    .header-brand { display: flex; align-items: center; gap: 10px; }
+    .brand-text h1 { font-size: 14px; font-weight: 700; color: var(--text); letter-spacing: -0.2px; }
+    .brand-text p { font-size: 11px; font-weight: 500; color: var(--text-muted); }
+    .header-law-link {
+      color: var(--accent); text-decoration: none; font-weight: 700; font-size: 13px;
+      border: 1px solid var(--accent); padding: 2px 7px; border-radius: 6px; transition: all 0.15s;
+    }
+    .header-law-link:hover { background: var(--accent); color: white; }
+    .info-pill { font-size: 11px; font-weight: 700; padding: 4px 10px; border-radius: 20px;
+      background: var(--primary-light); color: var(--text-muted); border: 1px solid var(--border); }
+    main { flex: 1; padding: 32px 20px; max-width: 860px; margin: 0 auto; width: 100%; }
+    .section-title { font-size: 11px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.08em; color: var(--text-muted); margin-bottom: 16px; }
+    .badge-row { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 12px; }
+    .badge { display: flex; align-items: center; gap: 6px; padding: 7px 14px; border-radius: 99px;
+      font-size: 12px; font-weight: 600; border: 1px solid var(--border); }
+    .badge.peca { background: var(--blue-bg); color: var(--blue); border-color: var(--blue); }
+    .badge.disc { background: var(--amber-bg); color: var(--amber); border-color: var(--amber); }
+    .badge.total { background: var(--accent-light); color: var(--accent); border-color: var(--accent); }
+    /* ── conteúdo — apenas variáveis do template ── */
+    .card {
+      background: var(--card-bg); border: 1px solid var(--border);
+      border-radius: 16px; padding: 24px; margin-bottom: 20px;
+    }
+    .card h3 {
+      font-size: 14px; font-weight: 700; color: var(--accent);
+      padding-bottom: 10px; margin-bottom: 14px;
+      border-bottom: 2px solid var(--accent-light);
+    }
+    .lista { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+    .lista li { font-size: 13.5px; color: var(--text); line-height: 1.6; padding-left: 16px; position: relative; }
+    .lista li::before { content: '›'; position: absolute; left: 0; color: var(--accent); font-weight: 700; }
+    .lista li strong { color: var(--primary); }
+    .tabela { width: 100%; border-collapse: collapse; font-size: 12.5px; margin: 12px 0; }
+    .tabela th { background: var(--primary-light); font-weight: 700; padding: 8px 12px; text-align: left; border: 1px solid var(--border); }
+    .tabela td { padding: 7px 12px; border: 1px solid var(--border); vertical-align: top; line-height: 1.5; }
+    .tabela tr:nth-child(even) td { background: var(--bg); }
+    .dica {
+      background: var(--amber-bg); border: 1.5px solid var(--amber);
+      border-radius: 10px; padding: 14px 18px; margin-top: 16px;
+    }
+    .dica strong { color: var(--amber); font-size: 12px; text-transform: uppercase; letter-spacing: .06em; display: block; margin-bottom: 8px; }
+    .dica ul { list-style: none; display: flex; flex-direction: column; gap: 5px; padding: 0; }
+    .dica li { font-size: 13px; color: var(--text); padding-left: 14px; position: relative; line-height: 1.5; }
+    .dica li::before { content: '★'; position: absolute; left: 0; color: var(--amber); font-size: 10px; top: 2px; }
+    .questao {
+      background: var(--card-bg); border: 2px solid var(--primary);
+      border-radius: 16px; padding: 24px; margin-bottom: 20px;
+    }
+    .q-num { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .1em;
+      color: var(--primary); background: var(--primary-light); padding: 3px 8px;
+      border-radius: 5px; display: inline-block; margin-bottom: 12px; }
+    .enunciado {
+      font-size: 13.5px; color: var(--text); line-height: 1.7;
+      background: var(--primary-light); border-radius: 8px;
+      padding: 14px 16px; margin-bottom: 18px;
+    }
+    .resp-titulo { font-size: 11px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: .08em; color: var(--accent); margin-bottom: 10px; }
+    .resp p { font-size: 13.5px; color: var(--text); line-height: 1.7; margin-bottom: 8px; }
+    .fundamento {
+      background: var(--accent-light); border: 1px solid var(--accent);
+      border-radius: 8px; padding: 10px 14px; margin-top: 14px;
+      font-size: 12px; color: var(--accent); font-weight: 600; line-height: 1.6;
+    }
+    .back-link { font-size: 12px; font-weight: 600; color: var(--accent); text-decoration: none;
+      border: 1px solid var(--accent); padding: 4px 10px; border-radius: 6px; transition: all .15s; }
+    .back-link:hover { background: var(--accent); color: #fff; }
+
+    /* ── navegação interna (sumário + paginação) — usa só as variáveis do template ── */
+    html { scroll-behavior: smooth; }
+    [id] { scroll-margin-top: 76px; }
+    .card, .questao { overflow-x: auto; }
+    .toc { background: var(--card-bg); border: 1px solid var(--border); border-radius: 16px;
+      padding: 16px 20px; margin-bottom: 24px; }
+    .toc-title { font-size: 11px; font-weight: 700; color: var(--text-muted); margin-bottom: 10px; }
+    .toc ol { list-style: none; display: flex; flex-wrap: wrap; gap: 6px; }
+    .toc a { display: inline-block; font-size: 12px; font-weight: 600; color: var(--primary);
+      text-decoration: none; background: var(--primary-light); border: 1px solid var(--border);
+      padding: 5px 11px; border-radius: 99px; transition: all .15s; }
+    .toc a:hover, .toc a:focus-visible { border-color: var(--accent); color: var(--accent); background: var(--accent-light); }
+    .pager { display: flex; gap: 12px; margin-top: 32px; }
+    .pager a { flex: 1; display: block; text-decoration: none; background: var(--card-bg);
+      border: 1px solid var(--border); border-radius: 12px; padding: 12px 16px; transition: border-color .15s; }
+    .pager a:hover, .pager a:focus-visible { border-color: var(--accent); }
+    .pager .dir { font-size: 11px; font-weight: 600; color: var(--text-muted); display: block; }
+    .pager .nome { font-size: 13px; font-weight: 700; color: var(--primary); }
+    .pager a.next { text-align: right; }
+    a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+    @media (max-width: 600px) { .pager { flex-direction: column; } .pager a.next { text-align: left; } }
+    @media print { header, .toc, .pager { display: none; } .card, .questao { break-inside: avoid; } body { background: #fff; } }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="header-brand">
+    <svg width="26" height="26" viewBox="0 0 24 24" fill="none"
+         stroke="var(--accent)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="12" cy="12" r="10"/>
+      <line x1="2" y1="12" x2="22" y2="12"/>
+      <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+    </svg>
+    <div class="brand-text">
+      <h1>Aula 1 · LINDB e Regras de Conexão ·
+        <a href="https://www.planalto.gov.br/ccivil_03/decreto-lei/del4657compilado.htm"
+           target="_blank" rel="noopener noreferrer"
+           class="header-law-link" title="LINDB no Planalto">LINDB ↗</a>
+      </h1>
+      <p>André L. da Silva · Dir. Internacional Privado · UNIP NP1 2026</p>
+    </div>
+  </div>
+  <a href="index.html" class="back-link">← Portal</a>
+</header>
+
+<main>
+
+  <nav class="toc" aria-label="Sumário da página">
+    <p class="toc-title">Nesta página</p>
+    <ol>
+      <li><a href="#o-que-sao-regras-de-conexao">O que são Regras de Conexão</a></li>
+      <li><a href="#art-7-lindb-domicilio-estado-capacidade-direito-de">Art. 7 LINDB · Domicílio</a></li>
+      <li><a href="#art-7-casamento-celebracao-regime-de-bens">Art. 7 · Casamento: celebração × regime de bens</a></li>
+      <li><a href="#art-7-6-divorcio-no-exterior">Art. 7 §6 · Divórcio no Exterior</a></li>
+      <li><a href="#exercicios">Exercícios</a></li>
+    </ol>
+  </nav>
+
+  <p class="section-title">Resumo · Aula 1</p>
+
+  <div class="card">
+    <h3 id="o-que-sao-regras-de-conexao">O que são Regras de Conexão</h3>
+    <ul class="lista">
+      <li>O DIP tem suas fontes no <strong>direito interno brasileiro</strong>: LINDB, CRFB, CPC e legislação especial (ex.: Lei de Arbitragem).</li>
+      <li><strong>Regras de conexão</strong> = normas de DIP que indicam qual lei (brasileira ou estrangeira) se aplica e qual juízo é competente quando a relação jurídica tem <strong>elemento estrangeiro</strong>.</li>
+      <li>São normas <strong>abstratas e gerais</strong>: não resolvem o caso — apenas <strong>apontam a lei</strong> que vai resolvê-lo (normas indiretas).</li>
+      <li><strong>Método da prova:</strong> (1) identifique a matéria principal; (2) abra o artigo da LINDB correspondente; (3) aplique o elemento de conexão aos fatos.</li>
+    </ul>
+    <table class="tabela">
+      <tr><th>Matéria do problema</th><th>Artigo LINDB</th><th>Elemento de conexão</th></tr>
+      <tr><td>Personalidade, nome, capacidade, família</td><td>Art. 7</td><td>Domicílio da pessoa</td></tr>
+      <tr><td>Bens / direitos reais</td><td>Art. 8</td><td>Local da situação do bem</td></tr>
+      <tr><td>Obrigações / contratos</td><td>Art. 9</td><td>Local da constituição</td></tr>
+      <tr><td>Sucessão</td><td>Art. 10</td><td>Domicílio do falecido</td></tr>
+    </table>
+  </div>
+
+  <div class="card">
+    <h3 id="art-7-lindb-domicilio-estado-capacidade-direito-de">Art. 7 LINDB — Domicílio (estado, capacidade, direito de família)</h3>
+    <ul class="lista">
+      <li><strong>Caput:</strong> a lei do país do <strong>domicílio</strong> da pessoa rege o começo e o fim da personalidade, o nome, a capacidade e os direitos de família.</li>
+      <li><strong>Estado civil</strong> tem tripla aferição: (1) <strong>política</strong> — nato, naturalizado, estrangeiro; (2) <strong>familiar</strong> — parentesco (pai, filho, irmão) e casamento (solteiro, casado, viúvo, divorciado); (3) <strong>individual</strong> — sexo, idade e sanidade.</li>
+      <li><strong>Ações de estado</strong> (divórcio, investigação/negatória de paternidade, naturalização, emancipação, interdição) com elemento estrangeiro → lei do domicílio.</li>
+      <li><strong>Domicílio</strong> = residência com ânimo definitivo. Sem domicílio → <strong>§8</strong>: considera-se domiciliada no lugar de sua <strong>residência</strong> ou naquele em que <strong>se encontre</strong>.</li>
+    </ul>
+    <table class="tabela">
+      <tr><th>Conexão</th><th>Critério</th></tr>
+      <tr><td>Principal</td><td>Lei do domicílio (caput)</td></tr>
+      <tr><td>Subsidiária</td><td>Residência habitual → local onde se encontre (§8)</td></tr>
+    </table>
+    <div class="dica">
+      <strong>Dicas de prova</strong>
+      <ul>
+        <li>O critério do DIP brasileiro é <strong>domicílio</strong>, não nacionalidade. Se a banca disser "aplica-se a lei da nacionalidade", desconfie.</li>
+        <li>Divórcio = ação de estado → lei do domicílio. Partilha de bens no Brasil = competência exclusiva brasileira (CPC art. 23, III — Aula 3).</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3 id="art-7-casamento-celebracao-regime-de-bens">Art. 7 — Casamento: celebração × regime de bens</h3>
+    <table class="tabela">
+      <tr><th>Aspecto do casamento</th><th>Lei aplicável</th><th>Dispositivo</th></tr>
+      <tr><td>Formalidades da celebração e impedimentos</td><td>Lei do <strong>local da celebração</strong> (<em>lex loci celebrationis</em>)</td><td>§1</td></tr>
+      <tr><td>Ambos os nubentes estrangeiros + autoridade diplomática/consular do país de ambos</td><td>Lei da <strong>nacionalidade dos nubentes</strong></td><td>§2</td></tr>
+      <tr><td>Invalidade do casamento (nubentes com domicílios diversos)</td><td>Lei do <strong>1º domicílio conjugal</strong></td><td>§3</td></tr>
+      <tr><td><strong>Regime de bens</strong> (legal ou convencional)</td><td>Lei do <strong>domicílio comum</strong> dos nubentes; se diversos → <strong>1º domicílio conjugal</strong></td><td>§4</td></tr>
+      <tr><td>Estrangeiro casado que se naturaliza</td><td>Pode adotar a <strong>comunhão parcial</strong> (anuência do cônjuge, direitos de terceiros, registro)</td><td>§5</td></tr>
+    </table>
+    <ul class="lista" style="margin-top:12px;">
+      <li><strong>Unidade do regime:</strong> o casal não pode ter vários regimes de bens, mesmo mudando de país (casaram no Brasil, moraram na Itália, depois nos EUA → um só regime).</li>
+      <li><strong>Imutabilidade quanto à lei originária:</strong> mudanças posteriores de domicílio não alteram o regime já fixado.</li>
+      <li><strong>Mutabilidade do regime (alteração voluntária):</strong> exige <strong>ação judicial</strong> no Brasil, pedido motivado de ambos os cônjuges e prova de ausência de prejuízo a terceiros (sem risco de fraude contra credores). Não se faz direto no cartório.</li>
+      <li><strong>Casamento no exterior:</strong> o registro (transcrição) deve ser feito no cartório competente no Brasil para produzir efeitos aqui. Certidão estrangeira omissa quanto ao regime → aplicam-se regras subsidiárias ou exige-se prova da norma de origem.</li>
+      <li><strong>Requisitos para o estrangeiro mudar o regime (§5):</strong> prévia naturalização, expressa anuência do cônjuge, respeito ao direito de terceiros e registro competente.</li>
+    </ul>
+    <div class="dica">
+      <strong>Pegadinha clássica de banca</strong>
+      <ul>
+        <li>Regime de bens NÃO segue o local do casamento — segue o <strong>domicílio</strong> dos nubentes (e só usa o 1º domicílio conjugal se os domicílios forem diferentes).</li>
+        <li>Casal britânico domiciliado no Rio, casado no consulado britânico → a celebração é válida (§2), mas o regime de bens = <strong>lei brasileira</strong> (§4).</li>
+        <li>O §1 fala literalmente do casamento "realizado no Brasil"; a aula generaliza como regra do local da celebração.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3 id="art-7-6-divorcio-no-exterior">Art. 7 §6 — Divórcio no Exterior</h3>
+    <ul class="lista">
+      <li><strong>Regra:</strong> a sentença estrangeira de divórcio precisa de <strong>Homologação de Sentença Estrangeira (HSE)</strong> no STJ para produzir efeitos no Brasil (CF art. 105, I, i).</li>
+      <li><strong>Exceção — CPC art. 961, §5º:</strong> divórcio <strong>consensual</strong> no exterior produz efeitos no Brasil <strong>independentemente de homologação</strong>. Basta averbação no cartório, com tradução juramentada.</li>
+      <li><strong>CPC art. 961, §6º:</strong> nesse caso, qualquer juiz pode examinar a validade da decisão, em caráter principal ou incidental, quando a questão surgir em processo de sua competência.</li>
+    </ul>
+    <div class="dica">
+      <strong>Correção da apostila</strong>
+      <ul>
+        <li>A apostila cita o <strong>§7</strong> para o divórcio no exterior, mas o dispositivo correto é o <strong>§6 do art. 7</strong>. O §7 trata do domicílio do chefe de família.</li>
+      </ul>
+    </div>
+  </div>
+
+  <p class="section-title" id="exercicios">Questão da Aula 1</p>
+
+  <div class="questao">
+    <span class="q-num">Caso Prático · Resposta manuscrita · 10 AC + 10 ES</span>
+    <div class="enunciado">
+      Em janeiro de 2003, Martin e Clarisse Green, cidadãos britânicos, domiciliados no Rio de Janeiro, casam-se no consulado geral britânico, localizado na praia do Flamengo. Em meados de 2010, decidem se divorciar. Na ausência de um pacto antenupcial, Clarisse requer, em petição à vara da família do Rio de Janeiro, metade dos bens adquiridos pelo casal desde a celebração do matrimônio, alegando que o regime vigente no Brasil é o da comunhão parcial dos bens. Martin contesta argumentando que o casamento foi realizado no consulado britânico e, portanto, deve ser aplicado o regime legal de bens do Reino Unido, que é mais favorável.
+      <br><br><strong>Com base no caso hipotético e nos termos da LINDB, quais dos nubentes está correto? Explique.</strong>
+    </div>
+    <div class="resp">
+      <p class="resp-titulo">Resposta fundamentada</p>
+      <p><strong>Clarisse está correta.</strong> Martin confunde a regra da <strong>celebração</strong> do casamento com a regra do <strong>regime de bens</strong>, que a LINDB trata em dispositivos diferentes.</p>
+      <p><strong>Celebração (art. 7, §2):</strong> por serem ambos britânicos, os nubentes podiam casar-se perante a autoridade consular do seu país, aplicando-se a lei britânica às formalidades. O casamento é válido — nesse ponto Martin tem razão.</p>
+      <p><strong>Regime de bens (art. 7, §4):</strong> o regime de bens, legal ou convencional, obedece à lei do país em que os nubentes têm <strong>domicílio</strong>. Martin e Clarisse eram domiciliados no Rio de Janeiro → aplica-se a <strong>lei brasileira</strong>. Sem pacto antenupcial, vigora o regime legal brasileiro: <strong>comunhão parcial de bens</strong> (CC art. 1.640).</p>
+      <p><strong>Conclusão:</strong> o local da celebração (consulado) só importa para as formalidades; o patrimônio segue a lei do domicílio conjugal. Clarisse tem direito à meação dos bens adquiridos onerosamente na constância do casamento.</p>
+      <div class="fundamento">Fundamento: LINDB art. 7, caput (família = lei do domicílio); art. 7, §2 (casamento consular de estrangeiros); art. 7, §4 (regime de bens = lei do domicílio dos nubentes); CC art. 1.640 (regime legal: comunhão parcial).</div>
+    </div>
+  </div>
+
+  <div class="badge-row">
+    <span class="badge peca">Art. 7 LINDB</span>
+    <span class="badge disc">Regime de bens = domicílio conjugal</span>
+    <span class="badge total">Celebração ≠ regime de bens</span>
+  </div>
+
+  <nav class="pager" aria-label="Navegação entre aulas">
+    <a href="index.html"><span class="dir">← Anterior</span><span class="nome">Portal</span></a>
+    <a class="next" href="aula2.html"><span class="dir">Próxima →</span><span class="nome">Aula 2 · Reais, Obrigações, Sucessões</span></a>
+  </nav>
+
+</main>
+</body>
+</html>

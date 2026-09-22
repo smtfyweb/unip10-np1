@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Aula 2 · Direitos Reais, Obrigações e Sucessões · DIP NP1</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #1e293b; --primary-hover: #0f172a; --primary-light: #f1f5f9;
+      --accent: #059669; --accent-light: #ecfdf5;
+      --danger: #dc2626; --danger-light: #fef2f2;
+      --amber: #d97706; --amber-bg: #fffbeb;
+      --rose: #e11d48; --rose-bg: #fff1f2;
+      --blue: #0284c7; --blue-bg: #f0f9ff;
+      --bg: #f8fafc; --card-bg: #ffffff;
+      --text: #0f172a; --text-muted: #64748b; --text-dim: #94a3b8;
+      --border: #e2e8f0;
+      --shadow: 0 10px 30px -5px rgba(0,0,0,0.05), 0 4px 12px -2px rgba(0,0,0,0.02);
+      --shadow-hover: 0 20px 35px -10px rgba(0,0,0,0.08);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0;
+        font-family: 'Inter', system-ui, -apple-system, sans-serif; -webkit-tap-highlight-color: transparent; }
+    body { background: var(--bg); color: var(--text); display: flex; flex-direction: column; min-height: 100vh; }
+    header { background: rgba(255,255,255,0.85); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border); padding: 12px 20px; display: flex; align-items: center;
+      justify-content: space-between; z-index: 50; height: 60px; position: sticky; top: 0; }
+    .header-brand { display: flex; align-items: center; gap: 10px; }
+    .brand-text h1 { font-size: 14px; font-weight: 700; color: var(--text); letter-spacing: -0.2px; }
+    .brand-text p { font-size: 11px; font-weight: 500; color: var(--text-muted); }
+    .header-law-link { color: var(--accent); text-decoration: none; font-weight: 700; font-size: 13px;
+      border: 1px solid var(--accent); padding: 2px 7px; border-radius: 6px; transition: all 0.15s; }
+    .header-law-link:hover { background: var(--accent); color: white; }
+    .info-pill { font-size: 11px; font-weight: 700; padding: 4px 10px; border-radius: 20px;
+      background: var(--primary-light); color: var(--text-muted); border: 1px solid var(--border); }
+    main { flex: 1; padding: 32px 20px; max-width: 860px; margin: 0 auto; width: 100%; }
+    .section-title { font-size: 11px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.08em; color: var(--text-muted); margin-bottom: 16px; }
+    .badge-row { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 12px; }
+    .badge { display: flex; align-items: center; gap: 6px; padding: 7px 14px; border-radius: 99px;
+      font-size: 12px; font-weight: 600; border: 1px solid var(--border); }
+    .badge.peca { background: var(--blue-bg); color: var(--blue); border-color: var(--blue); }
+    .badge.disc { background: var(--amber-bg); color: var(--amber); border-color: var(--amber); }
+    .badge.total { background: var(--accent-light); color: var(--accent); border-color: var(--accent); }
+    .card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 16px; padding: 24px; margin-bottom: 20px; }
+    .card h3 { font-size: 14px; font-weight: 700; color: var(--accent); padding-bottom: 10px; margin-bottom: 14px; border-bottom: 2px solid var(--accent-light); }
+    .lista { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+    .lista li { font-size: 13.5px; color: var(--text); line-height: 1.6; padding-left: 16px; position: relative; }
+    .lista li::before { content: '›'; position: absolute; left: 0; color: var(--accent); font-weight: 700; }
+    .lista li strong { color: var(--primary); }
+    .tabela { width: 100%; border-collapse: collapse; font-size: 12.5px; margin: 12px 0; }
+    .tabela th { background: var(--primary-light); font-weight: 700; padding: 8px 12px; text-align: left; border: 1px solid var(--border); }
+    .tabela td { padding: 7px 12px; border: 1px solid var(--border); vertical-align: top; line-height: 1.5; }
+    .tabela tr:nth-child(even) td { background: var(--bg); }
+    .dica { background: var(--amber-bg); border: 1.5px solid var(--amber); border-radius: 10px; padding: 14px 18px; margin-top: 16px; }
+    .dica strong { color: var(--amber); font-size: 12px; text-transform: uppercase; letter-spacing: .06em; display: block; margin-bottom: 8px; }
+    .dica ul { list-style: none; display: flex; flex-direction: column; gap: 5px; padding: 0; }
+    .dica li { font-size: 13px; color: var(--text); padding-left: 14px; position: relative; line-height: 1.5; }
+    .dica li::before { content: '★'; position: absolute; left: 0; color: var(--amber); font-size: 10px; top: 2px; }
+    .questao { background: var(--card-bg); border: 2px solid var(--primary); border-radius: 16px; padding: 24px; margin-bottom: 20px; }
+    .q-num { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .1em;
+      color: var(--primary); background: var(--primary-light); padding: 3px 8px; border-radius: 5px; display: inline-block; margin-bottom: 12px; }
+    .enunciado { font-size: 13.5px; color: var(--text); line-height: 1.7; background: var(--primary-light); border-radius: 8px; padding: 14px 16px; margin-bottom: 18px; }
+    .resp-titulo { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; color: var(--accent); margin-bottom: 10px; }
+    .resp p { font-size: 13.5px; color: var(--text); line-height: 1.7; margin-bottom: 8px; }
+    .fundamento { background: var(--accent-light); border: 1px solid var(--accent); border-radius: 8px; padding: 10px 14px; margin-top: 14px; font-size: 12px; color: var(--accent); font-weight: 600; line-height: 1.6; }
+    .back-link { font-size: 12px; font-weight: 600; color: var(--accent); text-decoration: none; border: 1px solid var(--accent); padding: 4px 10px; border-radius: 6px; transition: all .15s; }
+    .back-link:hover { background: var(--accent); color: #fff; }
+
+    /* ── navegação interna (sumário + paginação) — usa só as variáveis do template ── */
+    html { scroll-behavior: smooth; }
+    [id] { scroll-margin-top: 76px; }
+    .card, .questao { overflow-x: auto; }
+    .toc { background: var(--card-bg); border: 1px solid var(--border); border-radius: 16px;
+      padding: 16px 20px; margin-bottom: 24px; }
+    .toc-title { font-size: 11px; font-weight: 700; color: var(--text-muted); margin-bottom: 10px; }
+    .toc ol { list-style: none; display: flex; flex-wrap: wrap; gap: 6px; }
+    .toc a { display: inline-block; font-size: 12px; font-weight: 600; color: var(--primary);
+      text-decoration: none; background: var(--primary-light); border: 1px solid var(--border);
+      padding: 5px 11px; border-radius: 99px; transition: all .15s; }
+    .toc a:hover, .toc a:focus-visible { border-color: var(--accent); color: var(--accent); background: var(--accent-light); }
+    .pager { display: flex; gap: 12px; margin-top: 32px; }
+    .pager a { flex: 1; display: block; text-decoration: none; background: var(--card-bg);
+      border: 1px solid var(--border); border-radius: 12px; padding: 12px 16px; transition: border-color .15s; }
+    .pager a:hover, .pager a:focus-visible { border-color: var(--accent); }
+    .pager .dir { font-size: 11px; font-weight: 600; color: var(--text-muted); display: block; }
+    .pager .nome { font-size: 13px; font-weight: 700; color: var(--primary); }
+    .pager a.next { text-align: right; }
+    a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+    @media (max-width: 600px) { .pager { flex-direction: column; } .pager a.next { text-align: left; } }
+    @media print { header, .toc, .pager { display: none; } .card, .questao { break-inside: avoid; } body { background: #fff; } }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="header-brand">
+    <svg width="26" height="26" viewBox="0 0 24 24" fill="none"
+         stroke="var(--accent)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="12" cy="12" r="10"/>
+      <line x1="2" y1="12" x2="22" y2="12"/>
+      <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+    </svg>
+    <div class="brand-text">
+      <h1>Aula 2 · Direitos Reais, Obrigações e Sucessões ·
+        <a href="https://www.planalto.gov.br/ccivil_03/decreto-lei/del4657compilado.htm"
+           target="_blank" rel="noopener noreferrer" class="header-law-link">LINDB ↗</a>
+      </h1>
+      <p>André L. da Silva · Dir. Internacional Privado · UNIP NP1 2026</p>
+    </div>
+  </div>
+  <a href="index.html" class="back-link">← Portal</a>
+</header>
+
+<main>
+
+  <nav class="toc" aria-label="Sumário da página">
+    <p class="toc-title">Nesta página</p>
+    <ol>
+      <li><a href="#art-8-direitos-reais-lex-rei-sitae">Art. 8 · Direitos Reais</a></li>
+      <li><a href="#art-9-obrigacoes-lei-do-local-da-constituicao">Art. 9 · Obrigações</a></li>
+      <li><a href="#art-10-sucessoes">Art. 10 · Sucessões</a></li>
+      <li><a href="#exercicios">Exercícios</a></li>
+    </ol>
+  </nav>
+
+  <p class="section-title">Resumo · Aula 2</p>
+
+  <div class="card">
+    <h3 id="art-8-direitos-reais-lex-rei-sitae">Art. 8 — Direitos Reais (lex rei sitae)</h3>
+    <ul class="lista">
+      <li><strong>Caput:</strong> para qualificar os bens e regular as relações a eles concernentes → lei do <strong>país onde o bem está situado</strong> (<em>lex rei sitae</em>). Princípio da territorialidade.</li>
+      <li><strong>Combinação com o CPC art. 23, I:</strong> imóvel situado no Brasil → lei brasileira (CC) + julgamento exclusivo por juiz brasileiro.</li>
+      <li><strong>§1 — bens móveis sem localização permanente</strong> (ex.: automóvel, bagagem): lei do <strong>domicílio do proprietário</strong>, quanto aos bens que ele trouxer ou que se destinem a transporte para outros lugares.</li>
+      <li><strong>§2 — penhor:</strong> lei do <strong>domicílio de quem tem a posse</strong> da coisa empenhada (credor), e não a lei do local do bem nem a do proprietário.</li>
+      <li><strong>Propriedade intelectual</strong> (construção doutrinária): lei do <strong>país onde a proteção é invocada</strong>. Patente francesa copiada no Brasil → juiz aplica a Lei 9.279/1996.</li>
+      <li><strong>Navios, aeronaves e embarcações</strong> (construção doutrinária): lei do <strong>local da matrícula/registro</strong>.</li>
+    </ul>
+    <div class="dica">
+      <strong>Exemplo do penhor (§2)</strong>
+      <ul>
+        <li>Devedor francês (Paris) entrega relógio de ouro em penhor a credor domiciliado em Madri, que fica com a posse. Litígio sobre o penhor → <strong>lei espanhola</strong> (domicílio do possuidor).</li>
+      </ul>
+    </div>
+    <div class="dica">
+      <strong>Atenção — identifique a matéria principal</strong>
+      <ul>
+        <li>Contrato de compra e venda de imóvel → questão <strong>obrigacional</strong> (art. 9), não real (art. 8).</li>
+        <li>Herança de estrangeiro com bens no Brasil → questão <strong>sucessória</strong> (art. 10), não art. 8.</li>
+        <li><strong>Lei aplicável ≠ juízo competente:</strong> o juiz brasileiro pode ser o único competente (CPC art. 23) e mesmo assim aplicar lei estrangeira.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3 id="art-9-obrigacoes-lei-do-local-da-constituicao">Art. 9 — Obrigações (lei do local da constituição)</h3>
+    <ul class="lista">
+      <li><strong>Caput:</strong> para qualificar e reger as obrigações → lei do <strong>país em que se constituírem</strong>. Contrato se constitui na <strong>assinatura</strong> → lei do local onde foi assinado.</li>
+      <li><strong>Exemplo da aula:</strong> contrato assinado em Paris entre empresa alemã e empresa brasileira, executado no Brasil → lei francesa (mesmo que o juízo competente seja o brasileiro).</li>
+      <li><strong>§1 — execução no Brasil:</strong> se a obrigação será executada no Brasil e depende de <strong>forma essencial</strong>, essa forma deve ser observada (sob pena de nulidade), <strong>admitidas as peculiaridades da lei estrangeira quanto aos requisitos extrínsecos</strong> do ato.</li>
+      <li><strong>§2 — contrato entre ausentes:</strong> a obrigação resultante do contrato reputa-se constituída no lugar em que <strong>residir o proponente</strong>.</li>
+      <li><strong>Autonomia da vontade (conforme aula):</strong> a Convenção Americana sobre a celebração dos contratos internacionais permite que as partes escolham a lei aplicável — por isso, na prática, o art. 9 não é absoluto.</li>
+    </ul>
+    <div class="dica">
+      <strong>Locus regit actum — "quem faz na sua terra, manda na sua forma"</strong>
+      <ul>
+        <li><strong>Forma extrínseca</strong> (assinatura digital francesa, carimbo, formato do documento) = lei do local onde o ato foi praticado. O Brasil aceita.</li>
+        <li><strong>Forma essencial</strong> para execução no Brasil = lei brasileira imperativa (§1).</li>
+        <li>Caso da aula: máquinas vendidas por empresa francesa, contrato assinado em Paris, entrega em São Paulo → lei francesa rege o contrato; assinatura eletrônica francesa é aceita; exigências essenciais brasileiras devem ser cumpridas.</li>
+      </ul>
+    </div>
+    <div class="dica">
+      <strong>Cuidado na dissertativa</strong>
+      <ul>
+        <li>Se o contrato não trouxer <strong>escolha expressa de lei</strong>, aplica-se a regra do art. 9 (local da constituição).</li>
+        <li><strong>Eleição de foro ≠ escolha de lei:</strong> eleger o foro de São Paulo define <em>onde</em> julgar, não <em>qual lei</em> aplicar.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3 id="art-10-sucessoes">Art. 10 — Sucessões</h3>
+    <ul class="lista">
+      <li><strong>Caput:</strong> sucessão por morte ou ausência → lei do país do <strong>domicílio do falecido</strong> (ou desaparecido), <strong>qualquer que seja a natureza e a situação dos bens</strong>.</li>
+      <li><strong>§1 — exceção protetiva:</strong> sucessão de bens de estrangeiros situados no Brasil → <strong>lei brasileira</strong>, em benefício do <strong>cônjuge ou dos filhos brasileiros</strong>, sempre que não lhes seja mais favorável a lei pessoal do <em>de cujus</em>. Mesma regra na CF art. 5º, XXXI.</li>
+      <li><strong>§2 — capacidade para suceder:</strong> lei do <strong>domicílio do herdeiro ou legatário</strong>.</li>
+    </ul>
+    <table class="tabela" style="margin-top:12px;">
+      <tr><th>Situação</th><th>Lei aplicável</th></tr>
+      <tr><td><strong>Regra:</strong> sucessão em geral</td><td>Último domicílio do falecido</td></tr>
+      <tr><td><strong>Exceção:</strong> bens no Brasil + cônjuge/filhos brasileiros</td><td>Lei brasileira</td></tr>
+      <tr><td><strong>Exceção da exceção:</strong> lei do falecido é mais favorável a eles</td><td>Lei estrangeira (do falecido)</td></tr>
+      <tr><td>Capacidade do herdeiro para suceder</td><td>Domicílio do herdeiro</td></tr>
+    </table>
+    <div class="dica">
+      <strong>Exemplo do §2 (aula)</strong>
+      <ul>
+        <li>João, brasileiro domiciliado em Portugal, morre deixando apartamento em São Paulo. Filho Pedro mora na Espanha.</li>
+        <li>Sucessão (abertura e divisão) → lei portuguesa. Capacidade de Pedro para suceder → lei espanhola. Se a Espanha o considera capaz, ele herda.</li>
+        <li>Inventário do apartamento em SP → competência exclusiva do juiz brasileiro (CPC art. 23, II), que aplicará a lei portuguesa.</li>
+      </ul>
+    </div>
+    <div class="dica">
+      <strong>Mapa mental arts. 7–10</strong>
+      <ul>
+        <li><strong>Família / estado / capacidade</strong> → art. 7 → lei do domicílio</li>
+        <li><strong>Direitos reais / bens</strong> → art. 8 → lei do local do bem</li>
+        <li><strong>Contratos / obrigações</strong> → art. 9 → lei do local da constituição (assinatura)</li>
+        <li><strong>Sucessão / herança</strong> → art. 10 → lei do domicílio do falecido</li>
+      </ul>
+    </div>
+  </div>
+
+  <p class="section-title" id="exercicios">Questão da Aula 2</p>
+
+  <div class="questao">
+    <span class="q-num">Caso Prático · Resposta manuscrita · 15 AC + 15 ES</span>
+    <div class="enunciado">
+      Em junho de 2019, uma construtora brasileira assina na Cidade do Cabo, África do Sul, contrato de empreitada com uma empresa local, tendo por objeto a duplicação do trecho de rodovia que liga a Cidade do Cabo até a capital do país, Pretória. As contratantes elegem o foro da comarca de São Paulo para dirimir eventuais dúvidas. Um ano depois, as partes se desentenderam quanto aos critérios técnicos de medição das obras e não conseguiram chegar a uma solução amigável. A construtora brasileira decide, então, ajuizar, na justiça paulista, uma ação rescisória com objetivo de colocar termo ao contrato.
+      <br><br><strong>Com relação ao caso hipotético, comente e explique qual é a lei que deve ser aplicada na situação.</strong>
+    </div>
+    <div class="resp">
+      <p class="resp-titulo">Resposta fundamentada</p>
+      <p><strong>1. Identificação da matéria:</strong> a disputa versa sobre o próprio contrato de empreitada (critérios de medição e extinção do contrato). É matéria de <strong>direito das obrigações</strong> → <strong>art. 9 da LINDB</strong>, e não art. 8 (não se discute direito real sobre bem).</p>
+      <p><strong>2. Lei aplicável:</strong> pelo art. 9, caput, as obrigações regem-se pela lei do país em que se constituírem. O contrato foi <strong>assinado na Cidade do Cabo</strong> → aplica-se a <strong>lei sul-africana</strong> ao mérito.</p>
+      <p><strong>3. Eleição de foro não muda a lei:</strong> a escolha do foro de São Paulo é válida (CPC art. 22, III — submissão à jurisdição nacional) e define <em>onde</em> a causa será julgada. O juiz paulista julgará aplicando o direito sul-africano.</p>
+      <p><strong>4. Autonomia da vontade:</strong> as partes escolheram apenas o <em>foro</em>, não a <em>lei</em>; sem escolha de lei, vale a regra do art. 9.</p>
+      <p><strong>5. Exceção do §1 não incide:</strong> ela só vale quando a obrigação deve ser <strong>executada no Brasil</strong>. A obra é na África do Sul.</p>
+      <p><strong>6. Observação técnica:</strong> o nome correto da demanda é <strong>ação de rescisão contratual</strong>. "Ação rescisória" é a ação que desconstitui sentença transitada em julgado (CPC art. 966).</p>
+      <div class="fundamento">Fundamento: LINDB art. 9, caput (lei do local da constituição da obrigação) e §1 (inaplicável); CPC art. 22, III (eleição de foro brasileiro — competência concorrente).</div>
+    </div>
+  </div>
+
+  <div class="badge-row">
+    <span class="badge peca">Arts. 8, 9, 10 LINDB</span>
+    <span class="badge disc">Lex rei sitae (bens)</span>
+    <span class="badge total">Locus regit actum (forma)</span>
+  </div>
+
+  <nav class="pager" aria-label="Navegação entre aulas">
+    <a href="aula1.html"><span class="dir">← Anterior</span><span class="nome">Aula 1 · LINDB e Conexão</span></a>
+    <a class="next" href="aula3.html"><span class="dir">Próxima →</span><span class="nome">Aula 3 · Competência</span></a>
+  </nav>
+
+</main>
+</body>
+</html>

@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Aula 4 · Cooperação Jurídica Internacional · DIP NP1</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #1e293b; --primary-hover: #0f172a; --primary-light: #f1f5f9;
+      --accent: #059669; --accent-light: #ecfdf5;
+      --danger: #dc2626; --danger-light: #fef2f2;
+      --amber: #d97706; --amber-bg: #fffbeb;
+      --rose: #e11d48; --rose-bg: #fff1f2;
+      --blue: #0284c7; --blue-bg: #f0f9ff;
+      --bg: #f8fafc; --card-bg: #ffffff;
+      --text: #0f172a; --text-muted: #64748b; --text-dim: #94a3b8;
+      --border: #e2e8f0;
+      --shadow: 0 10px 30px -5px rgba(0,0,0,0.05), 0 4px 12px -2px rgba(0,0,0,0.02);
+      --shadow-hover: 0 20px 35px -10px rgba(0,0,0,0.08);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0;
+        font-family: 'Inter', system-ui, -apple-system, sans-serif; -webkit-tap-highlight-color: transparent; }
+    body { background: var(--bg); color: var(--text); display: flex; flex-direction: column; min-height: 100vh; }
+    header { background: rgba(255,255,255,0.85); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border); padding: 12px 20px; display: flex; align-items: center;
+      justify-content: space-between; z-index: 50; height: 60px; position: sticky; top: 0; }
+    .header-brand { display: flex; align-items: center; gap: 10px; }
+    .brand-text h1 { font-size: 14px; font-weight: 700; color: var(--text); letter-spacing: -0.2px; }
+    .brand-text p { font-size: 11px; font-weight: 500; color: var(--text-muted); }
+    .header-law-link { color: var(--accent); text-decoration: none; font-weight: 700; font-size: 13px;
+      border: 1px solid var(--accent); padding: 2px 7px; border-radius: 6px; transition: all 0.15s; }
+    .header-law-link:hover { background: var(--accent); color: white; }
+    main { flex: 1; padding: 32px 20px; max-width: 860px; margin: 0 auto; width: 100%; }
+    .section-title { font-size: 11px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.08em; color: var(--text-muted); margin-bottom: 16px; }
+    .badge-row { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 12px; }
+    .badge { display: flex; align-items: center; gap: 6px; padding: 7px 14px; border-radius: 99px;
+      font-size: 12px; font-weight: 600; border: 1px solid var(--border); }
+    .badge.peca { background: var(--blue-bg); color: var(--blue); border-color: var(--blue); }
+    .badge.disc { background: var(--amber-bg); color: var(--amber); border-color: var(--amber); }
+    .badge.total { background: var(--accent-light); color: var(--accent); border-color: var(--accent); }
+    .card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 16px; padding: 24px; margin-bottom: 20px; }
+    .card h3 { font-size: 14px; font-weight: 700; color: var(--accent); padding-bottom: 10px; margin-bottom: 14px; border-bottom: 2px solid var(--accent-light); }
+    .lista { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+    .lista li { font-size: 13.5px; color: var(--text); line-height: 1.6; padding-left: 16px; position: relative; }
+    .lista li::before { content: '›'; position: absolute; left: 0; color: var(--accent); font-weight: 700; }
+    .lista li strong { color: var(--primary); }
+    .tabela { width: 100%; border-collapse: collapse; font-size: 12.5px; margin: 12px 0; }
+    .tabela th { font-weight: 700; padding: 9px 12px; text-align: left; border: 1px solid var(--border); }
+    .tabela th.verde { background: var(--accent-light); color: var(--accent); }
+    .tabela th.azul { background: var(--blue-bg); color: var(--blue); }
+    .tabela th.cinza { background: var(--primary-light); color: var(--text-muted); }
+    .tabela td { padding: 7px 12px; border: 1px solid var(--border); vertical-align: top; line-height: 1.5; font-size: 12.5px; }
+    .tabela tr:nth-child(even) td { background: var(--bg); }
+    .dica { background: var(--amber-bg); border: 1.5px solid var(--amber); border-radius: 10px; padding: 14px 18px; margin-top: 16px; }
+    .dica strong { color: var(--amber); font-size: 12px; text-transform: uppercase; letter-spacing: .06em; display: block; margin-bottom: 8px; }
+    .dica ul { list-style: none; display: flex; flex-direction: column; gap: 5px; padding: 0; }
+    .dica li { font-size: 13px; color: var(--text); padding-left: 14px; position: relative; line-height: 1.5; }
+    .dica li::before { content: '★'; position: absolute; left: 0; color: var(--amber); font-size: 10px; top: 2px; }
+    .questao { background: var(--card-bg); border: 2px solid var(--primary); border-radius: 16px; padding: 24px; margin-bottom: 20px; }
+    .q-num { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .1em;
+      color: var(--primary); background: var(--primary-light); padding: 3px 8px; border-radius: 5px; display: inline-block; margin-bottom: 12px; }
+    .enunciado { font-size: 13.5px; color: var(--text); line-height: 1.7; background: var(--primary-light); border-radius: 8px; padding: 14px 16px; margin-bottom: 18px; }
+    .resp-titulo { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; color: var(--accent); margin-bottom: 10px; }
+    .resp p { font-size: 13.5px; color: var(--text); line-height: 1.7; margin-bottom: 8px; }
+    .fundamento { background: var(--accent-light); border: 1px solid var(--accent); border-radius: 8px; padding: 10px 14px; margin-top: 14px; font-size: 12px; color: var(--accent); font-weight: 600; line-height: 1.6; }
+    .back-link { font-size: 12px; font-weight: 600; color: var(--accent); text-decoration: none; border: 1px solid var(--accent); padding: 4px 10px; border-radius: 6px; transition: all .15s; }
+    .back-link:hover { background: var(--accent); color: #fff; }
+    .fases-num { display: inline-flex; align-items: center; justify-content: center;
+      width: 22px; height: 22px; border-radius: 50%; background: var(--accent); color: #fff;
+      font-size: 11px; font-weight: 700; flex-shrink: 0; margin-right: 8px; }
+    .fase-item { display: flex; align-items: flex-start; gap: 0; font-size: 13px; color: var(--text); line-height: 1.5; margin-bottom: 8px; }
+
+    /* ── navegação interna (sumário + paginação) — usa só as variáveis do template ── */
+    html { scroll-behavior: smooth; }
+    [id] { scroll-margin-top: 76px; }
+    .card, .questao { overflow-x: auto; }
+    .toc { background: var(--card-bg); border: 1px solid var(--border); border-radius: 16px;
+      padding: 16px 20px; margin-bottom: 24px; }
+    .toc-title { font-size: 11px; font-weight: 700; color: var(--text-muted); margin-bottom: 10px; }
+    .toc ol { list-style: none; display: flex; flex-wrap: wrap; gap: 6px; }
+    .toc a { display: inline-block; font-size: 12px; font-weight: 600; color: var(--primary);
+      text-decoration: none; background: var(--primary-light); border: 1px solid var(--border);
+      padding: 5px 11px; border-radius: 99px; transition: all .15s; }
+    .toc a:hover, .toc a:focus-visible { border-color: var(--accent); color: var(--accent); background: var(--accent-light); }
+    .pager { display: flex; gap: 12px; margin-top: 32px; }
+    .pager a { flex: 1; display: block; text-decoration: none; background: var(--card-bg);
+      border: 1px solid var(--border); border-radius: 12px; padding: 12px 16px; transition: border-color .15s; }
+    .pager a:hover, .pager a:focus-visible { border-color: var(--accent); }
+    .pager .dir { font-size: 11px; font-weight: 600; color: var(--text-muted); display: block; }
+    .pager .nome { font-size: 13px; font-weight: 700; color: var(--primary); }
+    .pager a.next { text-align: right; }
+    a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+    @media (max-width: 600px) { .pager { flex-direction: column; } .pager a.next { text-align: left; } }
+    @media print { header, .toc, .pager { display: none; } .card, .questao { break-inside: avoid; } body { background: #fff; } }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="header-brand">
+    <svg width="26" height="26" viewBox="0 0 24 24" fill="none"
+         stroke="var(--accent)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="12" cy="12" r="10"/>
+      <line x1="2" y1="12" x2="22" y2="12"/>
+      <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+    </svg>
+    <div class="brand-text">
+      <h1>Aula 4 · Cooperação Jurídica Internacional ·
+        <a href="https://www.planalto.gov.br/ccivil_03/_ato2015-2018/2015/lei/l13105.htm"
+           target="_blank" rel="noopener noreferrer" class="header-law-link">CPC ↗</a>
+      </h1>
+      <p>André L. da Silva · Dir. Internacional Privado · UNIP NP1 2026</p>
+    </div>
+  </div>
+  <a href="index.html" class="back-link">← Portal</a>
+</header>
+
+<main>
+
+  <nav class="toc" aria-label="Sumário da página">
+    <p class="toc-title">Nesta página</p>
+    <ol>
+      <li><a href="#cooperacao-juridica-internacional-conceito">Cooperação Jurídica Internacional · Conceito</a></li>
+      <li><a href="#graus-de-cooperacao">Graus de Cooperação</a></li>
+      <li><a href="#carta-rogatoria-auxilio-direto">Carta Rogatória × Auxílio Direto</a></li>
+      <li><a href="#carta-rogatoria-ativa-5-fases-brasil-pede-ao-exter">Carta Rogatória Ativa · 5 fases</a></li>
+      <li><a href="#carta-rogatoria-passiva-4-fases-exterior-pede-ao-b">Carta Rogatória Passiva · 4 fases</a></li>
+      <li><a href="#auxilio-direto-como-funciona">Auxílio Direto · como funciona</a></li>
+      <li><a href="#homologacao-de-sentenca-estrangeira-hse">Homologação de Sentença Estrangeira</a></li>
+      <li><a href="#instrumentos-modernos-e-autoridades-centrais">Instrumentos Modernos e Autoridades Centrais</a></li>
+      <li><a href="#exercicios">Exercícios</a></li>
+    </ol>
+  </nav>
+
+  <p class="section-title">Resumo · Aula 4</p>
+
+  <div class="card">
+    <h3 id="cooperacao-juridica-internacional-conceito">Cooperação Jurídica Internacional — Conceito</h3>
+    <ul class="lista">
+      <li><strong>Conceito:</strong> conjunto de mecanismos pelos quais os Estados prestam assistência mútua para realizar atos processuais além das fronteiras (citações, provas, bloqueio de bens).</li>
+      <li><strong>Problema que resolve:</strong> soberania × globalização — o juiz argentino não pode mandar seu oficial de justiça citar alguém em São Paulo.</li>
+      <li><strong>Fundamento constitucional:</strong> CF art. 4º, IX — cooperação entre os povos para o progresso da humanidade.</li>
+      <li><strong>Base no CPC:</strong> arts. 26 a 41 (cooperação) e arts. 960 a 965 (homologação de decisão estrangeira).</li>
+      <li><strong>Sem tratado:</strong> a cooperação pode se basear na <strong>reciprocidade</strong> manifestada por via diplomática (CPC art. 26, §1º).</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h3 id="graus-de-cooperacao">Graus de Cooperação</h3>
+    <table class="tabela">
+      <tr><th class="cinza">Grau</th><th class="verde">Natureza</th><th class="azul">Exemplos</th></tr>
+      <tr><td>1º grau</td><td>Mera comunicação</td><td>Citação, intimação, notificação</td></tr>
+      <tr><td>2º grau</td><td>Atos probatórios</td><td>Oitiva de testemunhas, perícias</td></tr>
+      <tr><td>3º grau</td><td>Atos executórios (atingem o patrimônio)</td><td>Arresto, sequestro, bloqueio de conta</td></tr>
+    </table>
+    <div class="dica">
+      <strong>Regra de ouro</strong>
+      <ul>
+        <li>Quanto maior o grau, maior a intervenção na esfera do outro Estado e maior a formalidade exigida.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3 id="carta-rogatoria-auxilio-direto">Carta Rogatória × Auxílio Direto</h3>
+    <table class="tabela">
+      <tr><th class="cinza">Critério</th><th class="verde">Carta Rogatória (via clássica)</th><th class="azul">Auxílio Direto (via moderna)</th></tr>
+      <tr><td>Origem do pedido</td><td>Ordem/decisão de um juiz para ser cumprida em outro país (juízo rogante → juízo rogado)</td><td>Pedido de assistência administrativa ou sobre um fato, entre Autoridades Centrais</td></tr>
+      <tr><td>Exequatur do STJ</td><td><strong>Obrigatório</strong> (rogatória passiva) — juízo de delibação</td><td><strong>Dispensa</strong> o juízo de delibação</td></tr>
+      <tr><td>Atos decisórios</td><td>Meio correto para atos com conteúdo decisório (penhora, busca e apreensão)</td><td>Não serve para executar decisão estrangeira impositiva</td></tr>
+      <tr><td>Quem atua no Brasil</td><td>STJ (exequatur) → Justiça Federal cumpre (CF art. 109, X)</td><td>Autoridade Central (MJSP/DRCI) → resolve sozinha ou aciona AGU/MPF → Justiça Federal</td></tr>
+      <tr><td>Velocidade</td><td>Mais demorada</td><td>Célere e menos formal</td></tr>
+    </table>
+    <div class="dica">
+      <strong>Critério legal para escolher (CPC art. 28)</strong>
+      <ul>
+        <li>Cabe <strong>auxílio direto</strong> quando a medida <strong>não decorre diretamente de decisão</strong> de autoridade jurisdicional estrangeira a ser submetida a juízo de delibação no Brasil.</li>
+        <li>Juiz estrangeiro <strong>mandou</strong> fazer (ex.: condução coercitiva de testemunha) → carta rogatória. Estrangeiro apenas <strong>pede ajuda</strong> e o Brasil decide pelas próprias leis (ex.: colher depoimento) → auxílio direto.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3 id="carta-rogatoria-ativa-5-fases-brasil-pede-ao-exter">Carta Rogatória Ativa — 5 fases (Brasil pede ao exterior)</h3>
+    <div class="fase-item"><span class="fases-num">1</span><span><strong>Confecção e tradução:</strong> juiz brasileiro expede a carta; o autor providencia tradução juramentada para o idioma do destino (Portugal dispensa tradução).</span></div>
+    <div class="fase-item"><span class="fases-num">2</span><span><strong>Envio à Autoridade Central:</strong> o tribunal remete ao Ministério da Justiça e Segurança Pública (MJSP).</span></div>
+    <div class="fase-item"><span class="fases-num">3</span><span><strong>Transmissão internacional:</strong> o governo brasileiro envia à Autoridade Central do país de destino.</span></div>
+    <div class="fase-item"><span class="fases-num">4</span><span><strong>Cumprimento local:</strong> o juízo rogado estrangeiro pratica o ato conforme suas leis (ex.: citação da empresa em Lisboa).</span></div>
+    <div class="fase-item"><span class="fases-num">5</span><span><strong>Devolução:</strong> o comprovante faz o caminho inverso e é juntado aos autos no Brasil.</span></div>
+    <div class="dica">
+      <strong>Caso da aula — BrTech × Algarve</strong>
+      <ul>
+        <li>Empresa de SP pagou R$ 500 mil a empresa de Lisboa que não entregou o software. Ré sem filial, bens ou representante no Brasil → juiz de SP não pode enviar oficial a Portugal → <strong>carta rogatória ativa de citação</strong>.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3 id="carta-rogatoria-passiva-4-fases-exterior-pede-ao-b">Carta Rogatória Passiva — 4 fases (exterior pede ao Brasil)</h3>
+    <div class="fase-item"><span class="fases-num">1</span><span><strong>Envio e tradução:</strong> tribunal estrangeiro envia via Autoridade Central, com tradução para o português.</span></div>
+    <div class="fase-item"><span class="fases-num">2</span><span><strong>Juízo de delibação no STJ:</strong> análise dos requisitos formais e da ordem pública — sem julgar o mérito.</span></div>
+    <div class="fase-item"><span class="fases-num">3</span><span><strong>Exequatur:</strong> o Presidente do STJ concede o "cumpra-se" (CF art. 105, I, i).</span></div>
+    <div class="fase-item"><span class="fases-num">4</span><span><strong>Execução:</strong> o STJ remete à Justiça Federal do local (CF art. 109, X), que cita, intima ou colhe a prova.</span></div>
+    <div class="dica">
+      <strong>Atenção</strong>
+      <ul>
+        <li>Caso da aula: montadora alemã processa fornecedora de SP em Berlim → rogatória para citar a empresa e ouvir o engenheiro-chefe → exequatur do STJ → Justiça Federal de SP.</li>
+        <li>Procedimento no STJ é contencioso, mas a defesa só discute os requisitos; é <strong>vedada a revisão do mérito</strong> (CPC art. 36).</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3 id="auxilio-direto-como-funciona">Auxílio Direto — como funciona</h3>
+    <ul class="lista">
+      <li><strong>Sem necessidade de juiz:</strong> a Autoridade Central resolve (ex.: certidão pública, cópia de contrato social na Junta Comercial, localização de pessoa, informações sobre bens em Miami).</li>
+      <li><strong>Com necessidade de juiz</strong> (ex.: quebra de sigilo): MJSP aciona a <strong>AGU</strong> (ou o MP), que ajuíza ação na <strong>Justiça Federal de 1ª instância</strong> (CPC art. 33).</li>
+      <li><strong>Nome da ação:</strong> não há nome único — "ação de auxílio direto passivo", produção antecipada de provas, quebra de sigilo, busca e apreensão.</li>
+      <li><strong>Competência:</strong> juízo federal do <strong>lugar em que deva ser executada a medida</strong> (CPC art. 34). Testemunha em Curitiba → Vara Federal de Curitiba. Federal porque a União/MPF está no polo (CF art. 109).</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h3 id="homologacao-de-sentenca-estrangeira-hse">Homologação de Sentença Estrangeira (HSE)</h3>
+    <ul class="lista">
+      <li><strong>Regra:</strong> decisão estrangeira só tem eficácia no Brasil após a <strong>homologação</strong> (ou o exequatur, se for rogatória), salvo lei ou tratado em contrário (CPC art. 961).</li>
+      <li><strong>Competência:</strong> <strong>STJ</strong>, desde a EC 45/2004 (antes era o STF) — CF art. 105, I, i.</li>
+      <li><strong>Natureza:</strong> <strong>juízo de delibação</strong> — o STJ não reabre o processo nem discute quem tinha razão; só verifica requisitos.</li>
+      <li><strong>Limite intransponível:</strong> <strong>ordem pública</strong> (ex.: sentença que valide escravidão ou punição corporal cruel). Base também na LINDB art. 17: não têm eficácia atos e sentenças que ofendam soberania, ordem pública e bons costumes.</li>
+      <li><strong>Não se homologa</strong> decisão sobre matéria de competência exclusiva brasileira (CPC art. 964).</li>
+      <li><strong>Depois de homologada:</strong> cumprimento perante a <strong>Justiça Federal</strong> (CPC art. 965; CF art. 109, X).</li>
+    </ul>
+    <table class="tabela">
+      <tr><th class="cinza">Requisito</th><th class="verde">Versão da aula</th><th class="azul">Texto do CPC art. 963</th></tr>
+      <tr><td>Autoridade</td><td>Juiz competente</td><td>I — autoridade competente</td></tr>
+      <tr><td>Defesa</td><td>Partes notificadas regularmente</td><td>II — citação regular, ainda que verificada a revelia</td></tr>
+      <tr><td>Definitividade</td><td>Trânsito em julgado</td><td>III — ser <strong>eficaz</strong> no país em que foi proferida</td></tr>
+      <tr><td>Coisa julgada</td><td>—</td><td>IV — não ofender coisa julgada brasileira</td></tr>
+      <tr><td>Tradução</td><td>Tradutor juramentado</td><td>V — tradução oficial, salvo dispensa em tratado</td></tr>
+      <tr><td>Ordem pública</td><td>Limite intransponível</td><td>VI — sem manifesta ofensa à ordem pública</td></tr>
+    </table>
+    <div class="dica">
+      <strong>HSE × Carta Rogatória × Divórcio consensual</strong>
+      <ul>
+        <li>Processo lá fora <strong>terminou</strong> e há sentença para produzir efeitos aqui → <strong>HSE</strong>.</li>
+        <li>Processo lá fora <strong>em curso</strong> e precisa de ato aqui (citação, prova, medida urgente) → <strong>carta rogatória</strong> (CPC arts. 960, §1º e 962).</li>
+        <li>Divórcio consensual simples no exterior → <strong>dispensa homologação</strong> (CPC art. 961, §5º).</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3 id="instrumentos-modernos-e-autoridades-centrais">Instrumentos Modernos e Autoridades Centrais</h3>
+    <ul class="lista">
+      <li><strong>Antes:</strong> tudo pela via diplomática (tribunal → Itamaraty → embaixada → governo estrangeiro) — levava anos.</li>
+      <li><strong>Hoje:</strong> via diplomática é <strong>exceção</strong>, usada só quando não há tratado.</li>
+      <li><strong>Regra atual:</strong> tratados com <strong>Autoridades Centrais</strong>. O Brasil integra a Conferência da Haia e ratificou as Convenções sobre <strong>Citação</strong> e sobre <strong>Obtenção de Provas</strong> → formulário padrão, envio eletrônico, meses em vez de anos.</li>
+      <li>Documento recebido via Autoridade Central ou via diplomática é considerado autêntico, dispensando legalização (CPC art. 41).</li>
+    </ul>
+  </div>
+
+  <p class="section-title" id="exercicios">Atividade da Aula 4 · 15 AC + 15 ES · manuscrita</p>
+
+  <div class="questao">
+    <span class="q-num">Caso Prático · Sentença japonesa de guarda</span>
+    <div class="enunciado">
+      Um casal de brasileiros morava no Japão e se divorciou por lá. O tribunal japonês deu a guarda dos filhos ao pai. A mãe, inconformada, viaja com as crianças de volta para o Brasil. O pai vem ao Brasil, contrata um advogado e tenta ir direto à polícia ou a um juiz de família local exigindo pegar as crianças de volta, mostrando a folha da sentença japonesa traduzida.
+      <br><br><strong>Isso é possível? Explique.</strong>
+    </div>
+    <div class="resp">
+      <p class="resp-titulo">Resposta fundamentada</p>
+      <p><strong>Não.</strong> A sentença japonesa não tem eficácia automática no Brasil (CPC art. 961). Nem a polícia nem o juiz estadual de família podem cumpri-la apenas com a tradução — isso ofenderia a soberania e a própria regra de competência.</p>
+      <p><strong>Caminho correto:</strong> (1) ajuizar <strong>ação de Homologação de Sentença Estrangeira no STJ</strong> (CF art. 105, I, i); (2) o STJ faz <strong>juízo de delibação</strong>: autoridade competente, citação regular, eficácia no Japão, tradução oficial e ausência de ofensa à ordem pública (CPC art. 963) — sem rediscutir quem deve ter a guarda; (3) homologada, o cumprimento é pedido na <strong>Justiça Federal</strong> (CPC art. 965; CF art. 109, X).</p>
+      <p><strong>Por que não carta rogatória:</strong> o processo japonês já terminou; a rogatória serve para atos de um processo em curso (citação, prova). <strong>Por que não auxílio direto:</strong> ele não serve para executar decisão estrangeira impositiva — e entregar as crianças é ato de conteúdo decisório.</p>
+      <p><strong>Conclusão:</strong> só depois da homologação a sentença japonesa terá força executiva no Brasil. Até lá, o pedido do pai à polícia ou ao juiz de família não produz efeito.</p>
+      <div class="fundamento">Fundamento: CF arts. 105, I, i e 109, X; CPC arts. 961, 963 e 965; juízo de delibação; LINDB art. 17 (ordem pública).</div>
+    </div>
+  </div>
+
+  <div class="badge-row">
+    <span class="badge peca">Carta Rogatória</span>
+    <span class="badge disc">Auxílio Direto</span>
+    <span class="badge total">HSE · STJ</span>
+  </div>
+
+  <nav class="pager" aria-label="Navegação entre aulas">
+    <a href="aula3.html"><span class="dir">← Anterior</span><span class="nome">Aula 3 · Competência</span></a>
+    <a class="next" href="aula5.html"><span class="dir">Próxima →</span><span class="nome">Aula 5 · Nacionalidade</span></a>
+  </nav>
+
+</main>
+</body>
+</html>

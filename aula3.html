@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Aula 3 · Competência Internacional · DIP NP1</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #1e293b; --primary-hover: #0f172a; --primary-light: #f1f5f9;
+      --accent: #059669; --accent-light: #ecfdf5;
+      --danger: #dc2626; --danger-light: #fef2f2;
+      --amber: #d97706; --amber-bg: #fffbeb;
+      --rose: #e11d48; --rose-bg: #fff1f2;
+      --blue: #0284c7; --blue-bg: #f0f9ff;
+      --bg: #f8fafc; --card-bg: #ffffff;
+      --text: #0f172a; --text-muted: #64748b; --text-dim: #94a3b8;
+      --border: #e2e8f0;
+      --shadow: 0 10px 30px -5px rgba(0,0,0,0.05), 0 4px 12px -2px rgba(0,0,0,0.02);
+      --shadow-hover: 0 20px 35px -10px rgba(0,0,0,0.08);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0;
+        font-family: 'Inter', system-ui, -apple-system, sans-serif; -webkit-tap-highlight-color: transparent; }
+    body { background: var(--bg); color: var(--text); display: flex; flex-direction: column; min-height: 100vh; }
+    header { background: rgba(255,255,255,0.85); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border); padding: 12px 20px; display: flex; align-items: center;
+      justify-content: space-between; z-index: 50; height: 60px; position: sticky; top: 0; }
+    .header-brand { display: flex; align-items: center; gap: 10px; }
+    .brand-text h1 { font-size: 14px; font-weight: 700; color: var(--text); letter-spacing: -0.2px; }
+    .brand-text p { font-size: 11px; font-weight: 500; color: var(--text-muted); }
+    .header-law-link { color: var(--accent); text-decoration: none; font-weight: 700; font-size: 13px;
+      border: 1px solid var(--accent); padding: 2px 7px; border-radius: 6px; transition: all 0.15s; }
+    .header-law-link:hover { background: var(--accent); color: white; }
+    main { flex: 1; padding: 32px 20px; max-width: 860px; margin: 0 auto; width: 100%; }
+    .section-title { font-size: 11px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.08em; color: var(--text-muted); margin-bottom: 16px; }
+    .badge-row { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 12px; }
+    .badge { display: flex; align-items: center; gap: 6px; padding: 7px 14px; border-radius: 99px;
+      font-size: 12px; font-weight: 600; border: 1px solid var(--border); }
+    .badge.peca { background: var(--blue-bg); color: var(--blue); border-color: var(--blue); }
+    .badge.disc { background: var(--amber-bg); color: var(--amber); border-color: var(--amber); }
+    .badge.total { background: var(--accent-light); color: var(--accent); border-color: var(--accent); }
+    .card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 16px; padding: 24px; margin-bottom: 20px; }
+    .card h3 { font-size: 14px; font-weight: 700; color: var(--accent); padding-bottom: 10px; margin-bottom: 14px; border-bottom: 2px solid var(--accent-light); }
+    .lista { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+    .lista li { font-size: 13.5px; color: var(--text); line-height: 1.6; padding-left: 16px; position: relative; }
+    .lista li::before { content: '›'; position: absolute; left: 0; color: var(--accent); font-weight: 700; }
+    .lista li strong { color: var(--primary); }
+    .tabela { width: 100%; border-collapse: collapse; font-size: 12.5px; margin: 12px 0; }
+    .tabela th { font-weight: 700; padding: 9px 12px; text-align: left; border: 1px solid var(--border); }
+    .tabela th.verde { background: var(--accent-light); color: var(--accent); }
+    .tabela th.azul { background: var(--rose-bg); color: var(--rose); }
+    .tabela th.cinza { background: var(--primary-light); color: var(--text-muted); }
+    .tabela td { padding: 7px 12px; border: 1px solid var(--border); vertical-align: top; line-height: 1.5; font-size: 12.5px; }
+    .tabela tr:nth-child(even) td { background: var(--bg); }
+    .dica { background: var(--amber-bg); border: 1.5px solid var(--amber); border-radius: 10px; padding: 14px 18px; margin-top: 16px; }
+    .dica strong { color: var(--amber); font-size: 12px; text-transform: uppercase; letter-spacing: .06em; display: block; margin-bottom: 8px; }
+    .dica ul { list-style: none; display: flex; flex-direction: column; gap: 5px; padding: 0; }
+    .dica li { font-size: 13px; color: var(--text); padding-left: 14px; position: relative; line-height: 1.5; }
+    .dica li::before { content: '★'; position: absolute; left: 0; color: var(--amber); font-size: 10px; top: 2px; }
+    .questao { background: var(--card-bg); border: 2px solid var(--primary); border-radius: 16px; padding: 24px; margin-bottom: 20px; }
+    .q-num { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .1em;
+      color: var(--primary); background: var(--primary-light); padding: 3px 8px; border-radius: 5px; display: inline-block; margin-bottom: 12px; }
+    .enunciado { font-size: 13.5px; color: var(--text); line-height: 1.7; background: var(--primary-light); border-radius: 8px; padding: 14px 16px; margin-bottom: 18px; }
+    .resp-titulo { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; color: var(--accent); margin-bottom: 10px; }
+    .resp p { font-size: 13.5px; color: var(--text); line-height: 1.7; margin-bottom: 8px; }
+    .fundamento { background: var(--accent-light); border: 1px solid var(--accent); border-radius: 8px; padding: 10px 14px; margin-top: 14px; font-size: 12px; color: var(--accent); font-weight: 600; line-height: 1.6; }
+    .back-link { font-size: 12px; font-weight: 600; color: var(--accent); text-decoration: none; border: 1px solid var(--accent); padding: 4px 10px; border-radius: 6px; transition: all .15s; }
+    .back-link:hover { background: var(--accent); color: #fff; }
+
+    /* ── navegação interna (sumário + paginação) — usa só as variáveis do template ── */
+    html { scroll-behavior: smooth; }
+    [id] { scroll-margin-top: 76px; }
+    .card, .questao { overflow-x: auto; }
+    .toc { background: var(--card-bg); border: 1px solid var(--border); border-radius: 16px;
+      padding: 16px 20px; margin-bottom: 24px; }
+    .toc-title { font-size: 11px; font-weight: 700; color: var(--text-muted); margin-bottom: 10px; }
+    .toc ol { list-style: none; display: flex; flex-wrap: wrap; gap: 6px; }
+    .toc a { display: inline-block; font-size: 12px; font-weight: 600; color: var(--primary);
+      text-decoration: none; background: var(--primary-light); border: 1px solid var(--border);
+      padding: 5px 11px; border-radius: 99px; transition: all .15s; }
+    .toc a:hover, .toc a:focus-visible { border-color: var(--accent); color: var(--accent); background: var(--accent-light); }
+    .pager { display: flex; gap: 12px; margin-top: 32px; }
+    .pager a { flex: 1; display: block; text-decoration: none; background: var(--card-bg);
+      border: 1px solid var(--border); border-radius: 12px; padding: 12px 16px; transition: border-color .15s; }
+    .pager a:hover, .pager a:focus-visible { border-color: var(--accent); }
+    .pager .dir { font-size: 11px; font-weight: 600; color: var(--text-muted); display: block; }
+    .pager .nome { font-size: 13px; font-weight: 700; color: var(--primary); }
+    .pager a.next { text-align: right; }
+    a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+    @media (max-width: 600px) { .pager { flex-direction: column; } .pager a.next { text-align: left; } }
+    @media print { header, .toc, .pager { display: none; } .card, .questao { break-inside: avoid; } body { background: #fff; } }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="header-brand">
+    <svg width="26" height="26" viewBox="0 0 24 24" fill="none"
+         stroke="var(--accent)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="12" cy="12" r="10"/>
+      <line x1="2" y1="12" x2="22" y2="12"/>
+      <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+    </svg>
+    <div class="brand-text">
+      <h1>Aula 3 · Competência Internacional ·
+        <a href="https://www.planalto.gov.br/ccivil_03/_ato2015-2018/2015/lei/l13105.htm"
+           target="_blank" rel="noopener noreferrer" class="header-law-link">CPC ↗</a>
+      </h1>
+      <p>André L. da Silva · Dir. Internacional Privado · UNIP NP1 2026</p>
+    </div>
+  </div>
+  <a href="index.html" class="back-link">← Portal</a>
+</header>
+
+<main>
+
+  <nav class="toc" aria-label="Sumário da página">
+    <p class="toc-title">Nesta página</p>
+    <ol>
+      <li><a href="#especies-de-competencia-internacional-cpc-arts-212">Espécies de Competência Internacional</a></li>
+      <li><a href="#art-21-competencia-concorrente-geral">Art. 21 · Competência Concorrente</a></li>
+      <li><a href="#art-22-competencia-concorrente-especial">Art. 22 · Competência Concorrente</a></li>
+      <li><a href="#art-23-competencia-exclusiva">Art. 23 · Competência Exclusiva</a></li>
+      <li><a href="#art-24-litispendencia-internacional">Art. 24 · Litispendência Internacional</a></li>
+      <li><a href="#art-25-eleicao-de-foro-exclusivo-estrangeiro">Art. 25 · Eleição de Foro Exclusivo Estrangeiro</a></li>
+      <li><a href="#exercicios">Exercícios</a></li>
+    </ol>
+  </nav>
+
+  <p class="section-title">Resumo · Aula 3</p>
+
+  <div class="card">
+    <h3 id="especies-de-competencia-internacional-cpc-arts-212">Espécies de Competência Internacional (CPC arts. 21–25)</h3>
+    <ul class="lista">
+      <li>O limite da jurisdição brasileira vai até onde a sentença pode ser <strong>efetiva</strong>: não adianta decidir no Brasil o que só pode ser cumprido lá fora, e vice-versa (<strong>princípio da efetividade</strong>).</li>
+    </ul>
+    <table class="tabela">
+      <tr>
+        <th class="cinza">Critério</th>
+        <th class="verde">Concorrente (arts. 21 e 22)</th>
+        <th class="azul">Exclusiva (art. 23)</th>
+      </tr>
+      <tr><td>Ajuizamento no Brasil</td><td>Facultativo — a parte escolhe (Brasil ou exterior)</td><td>Obrigatório — só vale a decisão brasileira</td></tr>
+      <tr><td>Sentença estrangeira sobre o tema</td><td>Pode ser homologada pelo STJ</td><td><strong>Não</strong> pode ser homologada (CPC art. 964)</td></tr>
+      <tr><td>Elemento central</td><td>Domicílio (réu, credor, consumidor), local da obrigação/fato, vontade das partes</td><td>Bens situados no Brasil</td></tr>
+      <tr><td>Eleição de foro estrangeiro</td><td>Afasta a jurisdição brasileira se arguida na contestação (art. 25)</td><td>Não afasta (art. 25, §1)</td></tr>
+    </table>
+    <div class="dica">
+      <strong>Regra de ouro</strong>
+      <ul>
+        <li>Nacionalidade das partes <strong>não importa</strong> para a competência internacional.</li>
+        <li>Concorrente → <strong>domicílio</strong> · Exclusiva → <strong>local dos bens</strong>.</li>
+        <li>Caso fora dos arts. 21–23 → <strong>inexistência de jurisdição</strong>: a Justiça brasileira está impedida de conhecer.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3 id="art-21-competencia-concorrente-geral">Art. 21 — Competência Concorrente (geral)</h3>
+    <ul class="lista">
+      <li><strong>Inciso I:</strong> o réu, qualquer que seja sua nacionalidade, <strong>estiver domiciliado no Brasil</strong>.</li>
+      <li><strong>Inciso II:</strong> no Brasil <strong>tiver de ser cumprida a obrigação</strong>.</li>
+      <li><strong>Inciso III:</strong> o fundamento seja <strong>fato ocorrido ou ato praticado no Brasil</strong>.</li>
+      <li><strong>Parágrafo único:</strong> considera-se domiciliada no Brasil a <strong>pessoa jurídica estrangeira</strong> que aqui tiver <strong>agência, filial ou sucursal</strong>.</li>
+    </ul>
+    <div class="dica">
+      <strong>Correção da apostila</strong>
+      <ul>
+        <li>A apostila lista só dois incisos e chama de "II" o fato ocorrido no Brasil. No CPC, o fato é o <strong>inciso III</strong>; o <strong>inciso II</strong> é a obrigação a ser cumprida no Brasil — é ele que derruba a alternativa (a) da Questão 2.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3 id="art-22-competencia-concorrente-especial">Art. 22 — Competência Concorrente (especial)</h3>
+    <ul class="lista">
+      <li><strong>Inciso I — Alimentos:</strong> (a) credor com <strong>domicílio ou residência</strong> no Brasil; <strong>ou</strong> (b) réu com <strong>vínculos no Brasil</strong> (posse ou propriedade de bens, recebimento de renda, benefícios econômicos). Basta uma das hipóteses.</li>
+      <li><strong>Inciso II — Consumo:</strong> consumidor com <strong>domicílio ou residência</strong> no Brasil (independe da nacionalidade e do local da compra).</li>
+      <li><strong>Inciso III — Submissão à jurisdição nacional:</strong> as partes, <strong>expressa ou tacitamente</strong>, se submeterem à jurisdição brasileira (ex.: cláusula de eleição de foro brasileiro; réu que não alega incompetência). A apostila comenta este ponto como "inciso II" — o correto é o <strong>III</strong>.</li>
+    </ul>
+    <div class="dica">
+      <strong>Por que alimentos têm regra própria</strong>
+      <ul>
+        <li>O crédito alimentar é privilegiado no mundo todo; a regra resume tratados de que o Brasil é parte (Convenção Interamericana sobre Obrigação Alimentar, Convenção de Nova York sobre prestação de alimentos no estrangeiro, Convenção da Haia).</li>
+        <li>Consentimento em ambiente internacional pode ser digital ou por videoconferência; no processo, deve ser provado pelo sistema brasileiro (ata notarial, upload do contrato com assinaturas eletrônicas).</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3 id="art-23-competencia-exclusiva">Art. 23 — Competência Exclusiva</h3>
+    <ul class="lista">
+      <li><strong>Inciso I:</strong> ações relativas a <strong>imóveis situados no Brasil</strong>.</li>
+      <li><strong>Inciso II:</strong> em sucessão hereditária, confirmação de testamento particular, inventário e partilha de <strong>bens situados no Brasil</strong>, ainda que o autor da herança seja estrangeiro ou domiciliado fora do Brasil.</li>
+      <li><strong>Inciso III:</strong> em divórcio, separação judicial ou dissolução de união estável, partilha de <strong>bens situados no Brasil</strong>, ainda que o titular seja estrangeiro ou domiciliado fora do Brasil.</li>
+    </ul>
+    <div class="dica">
+      <strong>Consequência prática</strong>
+      <ul>
+        <li>Decisão estrangeira sobre esses bens → <strong>ineficaz no Brasil</strong>; o STJ não homologa (CPC art. 964).</li>
+        <li><strong>Recíproca:</strong> o juiz brasileiro não partilha imóveis situados no exterior — faltaria efetividade e ofenderia a soberania do outro país.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3 id="art-24-litispendencia-internacional">Art. 24 — Litispendência Internacional</h3>
+    <ul class="lista">
+      <li>Ação proposta no exterior <strong>não induz litispendência</strong> e não impede o juiz brasileiro de julgar a mesma causa, salvo tratado em sentido contrário.</li>
+      <li><strong>Parágrafo único:</strong> ação pendente no Brasil <strong>não impede a homologação</strong> de sentença estrangeira sobre a mesma causa.</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h3 id="art-25-eleicao-de-foro-exclusivo-estrangeiro">Art. 25 — Eleição de Foro Exclusivo Estrangeiro</h3>
+    <ul class="lista">
+      <li><strong>Caput:</strong> não compete à Justiça brasileira a ação quando houver <strong>cláusula de eleição de foro exclusivo estrangeiro</strong> em <strong>contrato internacional</strong>, <strong>arguida pelo réu na contestação</strong>.</li>
+      <li><strong>Silêncio do réu:</strong> se não arguir na contestação, a causa continua no Brasil (submissão tácita).</li>
+      <li><strong>§1 — Exceção:</strong> não se aplica às hipóteses de <strong>competência exclusiva</strong> (art. 23). Norma de ordem pública: a vontade das partes não afasta.</li>
+      <li><strong>§2:</strong> aplicam-se as regras do art. 63, §§1º a 4º (cláusula escrita, controle de abusividade).</li>
+    </ul>
+  </div>
+
+  <p class="section-title" id="exercicios">Caso da Aula 3</p>
+
+  <div class="questao">
+    <span class="q-num">Estudo de caso · Divórcio com bens no exterior</span>
+    <div class="enunciado">
+      João e Maria discutem a partilha de seus bens em ação de divórcio no Brasil. Têm bens no Brasil, um apartamento no Canadá e uma casa de praia em Malta. O juiz brasileiro partilha os bens localizados no Brasil conforme o regime de bens do casal, mas se declara impedido de partilhar os bens estrangeiros.
+      <br><br><strong>O juiz agiu corretamente? Justifique com base no CPC.</strong>
+    </div>
+    <div class="resp">
+      <p class="resp-titulo">Resposta fundamentada</p>
+      <p><strong>Sim (Hipótese 2 da aula).</strong> O CPC art. 23, III dá competência <strong>exclusiva</strong> ao juiz brasileiro para partilhar os <strong>bens situados no Brasil</strong>. Sobre os imóveis no Canadá e em Malta, falta jurisdição: a decisão brasileira não seria homologada lá (princípio da efetividade e soberania).</p>
+      <p><strong>Hipótese 1 (errada):</strong> se o juiz partilhasse tudo, extrapolaria a jurisdição. Canadá e Malta reconheceriam o divórcio, guarda, alimentos e dívidas, mas não a partilha dos seus imóveis — o casal gastaria tempo e dinheiro duas vezes.</p>
+      <p><strong>Solução:</strong> todos os bens são arrolados; o juiz resolve divórcio, nome, guarda, alimentos, dívidas e bens brasileiros, e as partes fazem a <strong>sobrepartilha</strong> na Justiça canadense e maltesa.</p>
+      <div class="fundamento">Fundamento: CPC art. 23, III (competência exclusiva — partilha de bens no Brasil); princípio da efetividade; CPC art. 964 (recíproca: decisão estrangeira sobre bens no Brasil não se homologa).</div>
+    </div>
+  </div>
+
+  <p class="section-title">Atividade da Aula 3 · 15 AC + 15 ES</p>
+
+  <div class="questao">
+    <span class="q-num">Questão 1</span>
+    <div class="enunciado">
+      O que a autoridade judiciária brasileira é competente para conhecer:
+      <br>a) As ações relativas a imóveis situados no Brasil.
+      <br>b) As ações de alimentos.
+      <br>c) Ações em que as partes se submeterem à jurisdição nacional.
+      <br>d) Ações de divórcio.
+    </div>
+    <div class="resp">
+      <p class="resp-titulo">Gabarito provável: (a)</p>
+      <p><strong>(a)</strong> reproduz o CPC art. 23, I ("conhecer de ações relativas a imóveis situados no Brasil") e é a única hipótese <strong>incondicional e exclusiva</strong>.</p>
+      <p><strong>(b)</strong> e <strong>(d)</strong> estão incompletas: alimentos só nas hipóteses do art. 22, I; divórcio só se houver conexão com o Brasil (art. 21) — a exclusividade do art. 23, III é só para a partilha de bens aqui situados.</p>
+      <p><strong>(c)</strong> também tem base literal no art. 22, III. Na folha, marque (a) e registre em uma linha que (c) encontra amparo no art. 22, III, mas é hipótese de competência concorrente.</p>
+      <div class="fundamento">Fundamento: CPC art. 23, I (exclusiva); art. 22, I e III (concorrente); art. 21 (concorrente geral).</div>
+    </div>
+  </div>
+
+  <div class="questao">
+    <span class="q-num">Questão 2</span>
+    <div class="enunciado">
+      Considerando o que dispõe o CPC acerca dos limites da jurisdição nacional, assinale a alternativa correta:
+      <br>a) Compete à autoridade judiciária estrangeira processar e julgar as ações que versam sobre contrato firmado no estrangeiro, ainda que no Brasil tiver de ser cumprida a obrigação.
+      <br>b) Consumidor com domicílio e residência no Brasil adquire celular no exterior: não competirá à autoridade brasileira julgar a ação de consumo sobre defeito no aparelho.
+      <br>c) A submissão à jurisdição nacional deve ser expressa; não compete à autoridade brasileira julgar ações em que as partes tacitamente se submeterem.
+      <br>d) Compete à autoridade judiciária brasileira, com exclusão de qualquer outra, conhecer as ações relativas a imóveis situados no Brasil.
+    </div>
+    <div class="resp">
+      <p class="resp-titulo">Gabarito: (d)</p>
+      <p><strong>(a) Errada:</strong> obrigação a ser cumprida no Brasil → competência brasileira concorrente (CPC art. 21, <strong>II</strong>).</p>
+      <p><strong>(b) Errada:</strong> consumidor domiciliado ou residente no Brasil → competência brasileira (art. 22, II), qualquer que seja o local da compra.</p>
+      <p><strong>(c) Errada:</strong> a submissão pode ser <strong>expressa ou tácita</strong> (art. 22, III).</p>
+      <p><strong>(d) Correta:</strong> literalidade do art. 23, I — competência exclusiva.</p>
+      <div class="fundamento">Fundamento: CPC arts. 21, II; 22, II e III; 23, I.</div>
+    </div>
+  </div>
+
+  <div class="questao">
+    <span class="q-num">Questão 3</span>
+    <div class="enunciado">
+      Quando a autoridade judiciária brasileira é competente para ações de alimentos, de acordo com o CPC?
+      <br>a) Somente quando o credor tiver domicílio no Brasil.
+      <br>b) Somente quando o réu mantiver vínculos no Brasil.
+      <br>c) Apenas quando o consumidor tiver domicílio no Brasil.
+      <br>d) Quando o credor tiver domicílio ou residência no Brasil e o réu mantiver vínculos no Brasil.
+    </div>
+    <div class="resp">
+      <p class="resp-titulo">Gabarito: (d)</p>
+      <p><strong>(a)</strong> e <strong>(b)</strong> erram pelo "somente": cada uma exclui a outra hipótese. <strong>(c)</strong> confunde alimentos com consumo (art. 22, II).</p>
+      <p><strong>(d)</strong> é a única que reúne as duas hipóteses do art. 22, I. Ressalva para a justificativa: na lei as hipóteses são <strong>alternativas</strong> ("ou") — basta uma delas.</p>
+      <div class="fundamento">Fundamento: CPC art. 22, I, "a" e "b".</div>
+    </div>
+  </div>
+
+  <div class="badge-row">
+    <span class="badge peca">Arts. 21–25 CPC</span>
+    <span class="badge disc">Exclusiva = bens no BR</span>
+    <span class="badge total">Concorrente = domicílio</span>
+  </div>
+
+  <nav class="pager" aria-label="Navegação entre aulas">
+    <a href="aula2.html"><span class="dir">← Anterior</span><span class="nome">Aula 2 · Reais, Obrigações, Sucessões</span></a>
+    <a class="next" href="aula4.html"><span class="dir">Próxima →</span><span class="nome">Aula 4 · Cooperação e HSE</span></a>
+  </nav>
+
+</main>
+</body>
+</html>

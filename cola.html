@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cola de Véspera · DIP NP1</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #1e293b; --primary-hover: #0f172a; --primary-light: #f1f5f9;
+      --accent: #059669; --accent-light: #ecfdf5;
+      --danger: #dc2626; --danger-light: #fef2f2;
+      --amber: #d97706; --amber-bg: #fffbeb;
+      --rose: #e11d48; --rose-bg: #fff1f2;
+      --blue: #0284c7; --blue-bg: #f0f9ff;
+      --bg: #f8fafc; --card-bg: #ffffff;
+      --text: #0f172a; --text-muted: #64748b; --text-dim: #94a3b8;
+      --border: #e2e8f0;
+      --shadow: 0 10px 30px -5px rgba(0,0,0,0.05), 0 4px 12px -2px rgba(0,0,0,0.02);
+      --shadow-hover: 0 20px 35px -10px rgba(0,0,0,0.08);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0;
+        font-family: 'Inter', system-ui, -apple-system, sans-serif; -webkit-tap-highlight-color: transparent; }
+    body { background: var(--bg); color: var(--text); display: flex; flex-direction: column; min-height: 100vh; }
+    header { background: rgba(255,255,255,0.85); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border); padding: 12px 20px; display: flex; align-items: center;
+      justify-content: space-between; z-index: 50; height: 60px; position: sticky; top: 0; }
+    .header-brand { display: flex; align-items: center; gap: 10px; }
+    .brand-text h1 { font-size: 14px; font-weight: 700; color: var(--text); letter-spacing: -0.2px; }
+    .brand-text p { font-size: 11px; font-weight: 500; color: var(--text-muted); }
+    .header-law-link { color: var(--accent); text-decoration: none; font-weight: 700; font-size: 13px;
+      border: 1px solid var(--accent); padding: 2px 7px; border-radius: 6px; transition: all 0.15s; }
+    .header-law-link:hover { background: var(--accent); color: white; }
+    main { flex: 1; padding: 32px 20px; max-width: 860px; margin: 0 auto; width: 100%; }
+    .section-title { font-size: 11px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.08em; color: var(--text-muted); margin-bottom: 16px; }
+    .badge-row { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 12px; }
+    .badge { display: flex; align-items: center; gap: 6px; padding: 7px 14px; border-radius: 99px;
+      font-size: 12px; font-weight: 600; border: 1px solid var(--border); }
+    .badge.peca { background: var(--blue-bg); color: var(--blue); border-color: var(--blue); }
+    .badge.disc { background: var(--amber-bg); color: var(--amber); border-color: var(--amber); }
+    .badge.total { background: var(--accent-light); color: var(--accent); border-color: var(--accent); }
+    .card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 16px; padding: 24px; margin-bottom: 20px; }
+    .card h3 { font-size: 14px; font-weight: 700; color: var(--accent); padding-bottom: 10px; margin-bottom: 14px; border-bottom: 2px solid var(--accent-light); }
+    .lista { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+    .lista li { font-size: 13.5px; color: var(--text); line-height: 1.6; padding-left: 16px; position: relative; }
+    .lista li::before { content: '›'; position: absolute; left: 0; color: var(--accent); font-weight: 700; }
+    .lista li strong { color: var(--primary); }
+    .tabela { width: 100%; border-collapse: collapse; font-size: 12.5px; margin: 12px 0; }
+    .tabela th { font-weight: 700; padding: 9px 12px; text-align: left; border: 1px solid var(--border); }
+    .tabela th.verde { background: var(--accent-light); color: var(--accent); }
+    .tabela th.azul { background: var(--blue-bg); color: var(--blue); }
+    .tabela th.cinza { background: var(--primary-light); color: var(--text-muted); }
+    .tabela td { padding: 7px 12px; border: 1px solid var(--border); vertical-align: top; line-height: 1.5; font-size: 12.5px; }
+    .tabela tr:nth-child(even) td { background: var(--bg); }
+    .dica { background: var(--amber-bg); border: 1.5px solid var(--amber); border-radius: 10px; padding: 14px 18px; margin-top: 16px; }
+    .dica strong { color: var(--amber); font-size: 12px; text-transform: uppercase; letter-spacing: .06em; display: block; margin-bottom: 8px; }
+    .dica ul { list-style: none; display: flex; flex-direction: column; gap: 5px; padding: 0; }
+    .dica li { font-size: 13px; color: var(--text); padding-left: 14px; position: relative; line-height: 1.5; }
+    .dica li::before { content: '★'; position: absolute; left: 0; color: var(--amber); font-size: 10px; top: 2px; }
+    .questao { background: var(--card-bg); border: 2px solid var(--primary); border-radius: 16px; padding: 24px; margin-bottom: 20px; }
+    .q-num { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .1em;
+      color: var(--primary); background: var(--primary-light); padding: 3px 8px; border-radius: 5px; display: inline-block; margin-bottom: 12px; }
+    .enunciado { font-size: 13.5px; color: var(--text); line-height: 1.7; background: var(--primary-light); border-radius: 8px; padding: 14px 16px; margin-bottom: 18px; }
+    .resp-titulo { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; color: var(--accent); margin-bottom: 10px; }
+    .resp p { font-size: 13.5px; color: var(--text); line-height: 1.7; margin-bottom: 8px; }
+    .fundamento { background: var(--accent-light); border: 1px solid var(--accent); border-radius: 8px; padding: 10px 14px; margin-top: 14px; font-size: 12px; color: var(--accent); font-weight: 600; line-height: 1.6; }
+    .back-link { font-size: 12px; font-weight: 600; color: var(--accent); text-decoration: none; border: 1px solid var(--accent); padding: 4px 10px; border-radius: 6px; transition: all .15s; }
+    .back-link:hover { background: var(--accent); color: #fff; }
+    .fases-num { display: inline-flex; align-items: center; justify-content: center;
+      width: 22px; height: 22px; border-radius: 50%; background: var(--accent); color: #fff;
+      font-size: 11px; font-weight: 700; flex-shrink: 0; margin-right: 8px; }
+    .fase-item { display: flex; align-items: flex-start; gap: 0; font-size: 13px; color: var(--text); line-height: 1.5; margin-bottom: 8px; }
+
+    /* ── navegação interna (sumário + paginação) — usa só as variáveis do template ── */
+    html { scroll-behavior: smooth; }
+    [id] { scroll-margin-top: 76px; }
+    .card, .questao { overflow-x: auto; }
+    .toc { background: var(--card-bg); border: 1px solid var(--border); border-radius: 16px;
+      padding: 16px 20px; margin-bottom: 24px; }
+    .toc-title { font-size: 11px; font-weight: 700; color: var(--text-muted); margin-bottom: 10px; }
+    .toc ol { list-style: none; display: flex; flex-wrap: wrap; gap: 6px; }
+    .toc a { display: inline-block; font-size: 12px; font-weight: 600; color: var(--primary);
+      text-decoration: none; background: var(--primary-light); border: 1px solid var(--border);
+      padding: 5px 11px; border-radius: 99px; transition: all .15s; }
+    .toc a:hover, .toc a:focus-visible { border-color: var(--accent); color: var(--accent); background: var(--accent-light); }
+    .pager { display: flex; gap: 12px; margin-top: 32px; }
+    .pager a { flex: 1; display: block; text-decoration: none; background: var(--card-bg);
+      border: 1px solid var(--border); border-radius: 12px; padding: 12px 16px; transition: border-color .15s; }
+    .pager a:hover, .pager a:focus-visible { border-color: var(--accent); }
+    .pager .dir { font-size: 11px; font-weight: 600; color: var(--text-muted); display: block; }
+    .pager .nome { font-size: 13px; font-weight: 700; color: var(--primary); }
+    .pager a.next { text-align: right; }
+    a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+    @media (max-width: 600px) { .pager { flex-direction: column; } .pager a.next { text-align: left; } }
+    @media print { header, .toc, .pager { display: none; } .card, .questao { break-inside: avoid; } body { background: #fff; } }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="header-brand">
+    <svg width="26" height="26" viewBox="0 0 24 24" fill="none"
+         stroke="var(--accent)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="12" cy="12" r="10"/>
+      <line x1="2" y1="12" x2="22" y2="12"/>
+      <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+    </svg>
+    <div class="brand-text">
+      <h1>Cola de Véspera · Aulas 1 a 5 ·
+        <a href="https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm"
+           target="_blank" rel="noopener noreferrer" class="header-law-link">CF ↗</a>
+      </h1>
+      <p>André L. da Silva · Dir. Internacional Privado · UNIP NP1 2026</p>
+    </div>
+  </div>
+  <a href="index.html" class="back-link">← Portal</a>
+</header>
+
+<main>
+
+  <nav class="toc" aria-label="Sumário da página">
+    <p class="toc-title">Nesta página</p>
+    <ol>
+      <li><a href="#roteiro-4-perguntas-para-qualquer-questao">Roteiro: 4 perguntas para qualquer questão</a></li>
+      <li><a href="#qual-lei-lindb">LINDB</a></li>
+      <li><a href="#qual-juiz-cpc-arts-21-a-25">CPC arts. 21 a 25</a></li>
+      <li><a href="#como-cumprir-cooperacao-e-homologacao">Cooperação e homologação</a></li>
+      <li><a href="#quem-e-brasileiro-nacionalidade">Nacionalidade</a></li>
+      <li><a href="#pegadinhas-mais-provaveis">Pegadinhas mais prováveis</a></li>
+      <li><a href="#modelo-de-resposta-dissertativa">Modelo de resposta dissertativa</a></li>
+      <li><a href="#correcoes-da-apostila-confira-no-vademecum">Correções da apostila</a></li>
+    </ol>
+  </nav>
+
+  <p class="section-title">Cola de véspera · tudo em uma página</p>
+
+  <div class="card">
+    <h3 id="roteiro-4-perguntas-para-qualquer-questao">Roteiro: 4 perguntas para qualquer questão</h3>
+    <table class="tabela">
+      <tr><th class="cinza">A questão pergunta…</th><th class="verde">Onde procurar</th><th class="azul">Aula</th></tr>
+      <tr><td><strong>Qual lei</strong> se aplica (brasileira ou estrangeira)?</td><td>LINDB arts. 7 a 10</td><td>1 e 2</td></tr>
+      <tr><td><strong>Qual juiz</strong> pode julgar (Brasil ou exterior)?</td><td>CPC arts. 21 a 25</td><td>3</td></tr>
+      <tr><td><strong>Como cumprir</strong> um ato ou decisão de outro país?</td><td>CPC arts. 26–41 e 960–965; CF arts. 105, I, i e 109, X</td><td>4</td></tr>
+      <tr><td><strong>Quem é brasileiro</strong> e com quais direitos?</td><td>CF art. 12 e art. 5º, LI; Lei 13.445/2017</td><td>5</td></tr>
+    </table>
+    <div class="dica">
+      <strong>Lei aplicável ≠ juiz competente</strong>
+      <ul>
+        <li>São perguntas diferentes. O juiz brasileiro pode ser o competente e aplicar lei estrangeira (ex.: contrato assinado em Paris julgado no Brasil → lei francesa).</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3 id="qual-lei-lindb">Qual lei? — LINDB</h3>
+    <table class="tabela">
+      <tr><th class="cinza">Matéria</th><th class="verde">Regra</th><th class="azul">Exceções e detalhes</th></tr>
+      <tr><td><strong>Estado, capacidade, família</strong> (art. 7)</td><td>Lei do <strong>domicílio</strong></td><td>Sem domicílio → residência ou onde se encontre (§8)</td></tr>
+      <tr><td><strong>Celebração do casamento</strong> (art. 7, §§1–2)</td><td>Lei do <strong>local da celebração</strong></td><td>Ambos estrangeiros + consulado do país de ambos → lei da nacionalidade (§2)</td></tr>
+      <tr><td><strong>Invalidade do casamento</strong> (art. 7, §3)</td><td>Domicílios diversos → <strong>1º domicílio conjugal</strong></td><td>—</td></tr>
+      <tr><td><strong>Regime de bens</strong> (art. 7, §4)</td><td>Lei do <strong>domicílio</strong> dos nubentes</td><td>Domicílios diversos → 1º domicílio conjugal. Estrangeiro naturalizado pode adotar comunhão parcial (§5)</td></tr>
+      <tr><td><strong>Divórcio no exterior</strong> (art. 7, §6)</td><td><strong>Homologação no STJ</strong></td><td>Consensual → dispensa homologação (CPC art. 961, §5º)</td></tr>
+      <tr><td><strong>Bens / direitos reais</strong> (art. 8)</td><td>Lei do <strong>local do bem</strong></td><td>Móvel em trânsito → domicílio do proprietário (§1) · Penhor → domicílio do possuidor (§2) · PI → país onde a proteção é invocada · Navio/aeronave → local da matrícula</td></tr>
+      <tr><td><strong>Obrigações / contratos</strong> (art. 9)</td><td>Lei do <strong>local da constituição</strong> (assinatura)</td><td>Execução no Brasil com forma essencial → forma brasileira, aceitos requisitos extrínsecos estrangeiros (§1) · Entre ausentes → residência do proponente (§2) · Autonomia da vontade (conforme aula)</td></tr>
+      <tr><td><strong>Sucessão</strong> (art. 10)</td><td>Lei do <strong>domicílio do falecido</strong></td><td>Bens no Brasil + cônjuge/filhos brasileiros → lei brasileira, salvo se a do falecido for mais favorável (§1) · Capacidade para suceder → domicílio do herdeiro (§2)</td></tr>
+      <tr><td><strong>Limite geral</strong> (art. 17)</td><td colspan="2">Leis, atos e sentenças estrangeiras não têm eficácia no Brasil se ofenderem a <strong>soberania nacional, a ordem pública e os bons costumes</strong></td></tr>
+    </table>
+  </div>
+
+  <div class="card">
+    <h3 id="qual-juiz-cpc-arts-21-a-25">Qual juiz? — CPC arts. 21 a 25</h3>
+    <table class="tabela">
+      <tr><th class="cinza">Tipo</th><th class="verde">Hipóteses</th><th class="azul">Efeito</th></tr>
+      <tr><td><strong>Concorrente</strong> (art. 21)</td><td>I — réu domiciliado no Brasil (PJ estrangeira com agência, filial ou sucursal aqui = domiciliada) · II — obrigação a cumprir no Brasil · III — fato ocorrido ou ato praticado no Brasil</td><td>Pode ajuizar aqui ou lá; sentença estrangeira é homologável</td></tr>
+      <tr><td><strong>Concorrente</strong> (art. 22)</td><td>I — alimentos: credor com domicílio/residência no Brasil <em>ou</em> réu com vínculos aqui · II — consumidor com domicílio/residência no Brasil · III — submissão expressa ou tácita</td><td>Idem</td></tr>
+      <tr><td><strong>Exclusiva</strong> (art. 23)</td><td>I — imóveis no Brasil · II — testamento particular, inventário e partilha de bens no Brasil · III — partilha de bens no Brasil em divórcio/separação/união estável</td><td>Só vale decisão brasileira; STJ não homologa estrangeira (art. 964)</td></tr>
+      <tr><td><strong>Litispendência</strong> (art. 24)</td><td colspan="2">Ação no exterior não induz litispendência; ação pendente no Brasil não impede homologação</td></tr>
+      <tr><td><strong>Foro estrangeiro</strong> (art. 25)</td><td colspan="2">Cláusula de foro <strong>exclusivo estrangeiro</strong> em contrato internacional + <strong>arguida na contestação</strong> → Brasil não julga. Não vale para o art. 23 (§1)</td></tr>
+    </table>
+  </div>
+
+  <div class="card">
+    <h3 id="como-cumprir-cooperacao-e-homologacao">Como cumprir? — Cooperação e homologação</h3>
+    <table class="tabela">
+      <tr><th class="cinza">Situação</th><th class="verde">Mecanismo</th><th class="azul">Caminho</th></tr>
+      <tr><td>Juiz brasileiro precisa citar alguém no exterior</td><td>Carta rogatória <strong>ativa</strong></td><td>Juiz → tradução → MJSP → Autoridade Central estrangeira → juízo rogado → devolução</td></tr>
+      <tr><td>Juiz estrangeiro <strong>manda</strong> praticar ato no Brasil</td><td>Carta rogatória <strong>passiva</strong></td><td>Autoridade Central → STJ (delibação + <strong>exequatur</strong>) → Justiça Federal</td></tr>
+      <tr><td>Estado estrangeiro <strong>pede ajuda</strong> (informação, prova, localização)</td><td><strong>Auxílio direto</strong></td><td>Autoridade Central (MJSP/DRCI) → resolve ou aciona AGU/MPF → JF do local da medida (art. 34). Sem STJ</td></tr>
+      <tr><td>Processo lá fora <strong>terminou</strong> e a sentença deve valer aqui</td><td><strong>HSE</strong></td><td>STJ (delibação) → cumprimento na Justiça Federal (art. 965)</td></tr>
+      <tr><td>Divórcio consensual no exterior</td><td>Sem homologação</td><td>Averbação com tradução juramentada (art. 961, §5º)</td></tr>
+    </table>
+    <ul class="lista" style="margin-top:12px;">
+      <li><strong>Graus:</strong> 1º comunicação (citação, intimação) · 2º probatório (testemunha, perícia) · 3º executório (arresto, sequestro, bloqueio).</li>
+      <li><strong>Requisitos da HSE (CPC art. 963):</strong> autoridade competente · citação regular (ainda que revel) · eficácia no país de origem (aula: trânsito em julgado) · não ofender coisa julgada brasileira · tradução oficial · sem ofensa manifesta à ordem pública.</li>
+      <li><strong>Juízo de delibação:</strong> STJ não reexamina o mérito (CPC art. 36, §2º).</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h3 id="quem-e-brasileiro-nacionalidade">Quem é brasileiro? — Nacionalidade</h3>
+    <table class="tabela">
+      <tr><th class="cinza">Situação</th><th class="verde">Resultado</th><th class="azul">Base</th></tr>
+      <tr><td>Nasceu no Brasil, pais estrangeiros <strong>não</strong> a serviço do seu país</td><td>Nato</td><td>CF 12, I, a</td></tr>
+      <tr><td>Nasceu no Brasil, pais estrangeiros <strong>a serviço</strong> do seu país</td><td>Estrangeiro</td><td>CF 12, I, a (exceção)</td></tr>
+      <tr><td>Nasceu no exterior, pai/mãe brasileiro <strong>a serviço do Brasil</strong></td><td>Nato</td><td>CF 12, I, b</td></tr>
+      <tr><td>Nasceu no exterior, pai/mãe brasileiro <strong>não</strong> a serviço + registro consular</td><td>Nato</td><td>CF 12, I, c</td></tr>
+      <tr><td>Idem, sem registro, veio residir no Brasil e <strong>optou</strong> após a maioridade</td><td>Nato (opção na Justiça Federal)</td><td>CF 12, I, c; 109, X; Lei 13.445, art. 63</td></tr>
+      <tr><td>Estrangeiro: 4 anos + capacidade + português + sem condenação</td><td>Naturalizado (ordinária, discricionária)</td><td>Lei 13.445, art. 65 (1 ano nas hipóteses do art. 66)</td></tr>
+      <tr><td>Originário de país de língua portuguesa: 1 ano + idoneidade</td><td>Naturalizado</td><td>CF 12, II, a</td></tr>
+      <tr><td>Mais de 15 anos ininterruptos + sem condenação + requerimento</td><td>Naturalizado (extraordinária, <strong>vinculada</strong>)</td><td>CF 12, II, b; Lei 13.445, art. 67</td></tr>
+    </table>
+    <ul class="lista" style="margin-top:12px;">
+      <li><strong>Privativos de nato (§3º):</strong> Presidente e Vice · Presidente da Câmara · Presidente do Senado · Ministro do STF · carreira diplomática · oficial das Forças Armadas · Ministro da Defesa.</li>
+      <li><strong>Extradição (5º, LI):</strong> nato nunca; naturalizado por crime comum anterior ou tráfico de entorpecentes.</li>
+      <li><strong>Perda (§4º, EC 131/2023):</strong> I — naturalizado, por sentença, por fraude na naturalização ou atentado à ordem constitucional · II — pedido expresso, salvo apatridia. Renúncia não impede reaquisição (§5º). Dupla nacionalidade é permitida.</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h3 id="pegadinhas-mais-provaveis">Pegadinhas mais prováveis</h3>
+    <ul class="lista">
+      <li>Regime de bens <strong>não</strong> segue o local do casamento — segue o domicílio (art. 7, §4).</li>
+      <li>Casamento no consulado estrangeiro é válido quanto à forma (§2), mas não muda o regime de bens.</li>
+      <li>Compra e venda de imóvel é <strong>obrigação</strong> (art. 9), não direito real (art. 8).</li>
+      <li>Penhor segue o domicílio do <strong>possuidor</strong>, não do proprietário.</li>
+      <li>Eleição de foro define o <strong>juiz</strong>, não a <strong>lei</strong>.</li>
+      <li>Alimentos e consumo: basta <strong>domicílio ou residência</strong> no Brasil; alimentos têm hipóteses alternativas ("ou").</li>
+      <li>Submissão à jurisdição brasileira pode ser <strong>tácita</strong>.</li>
+      <li>Foro estrangeiro só afasta o Brasil se o réu <strong>arguir na contestação</strong> — e nunca nas hipóteses do art. 23.</li>
+      <li>Auxílio direto <strong>não</strong> serve para ato decisório; carta rogatória passiva <strong>sempre</strong> passa pelo STJ.</li>
+      <li>Sentença estrangeira nunca vale "direto": precisa de HSE no STJ (exceto divórcio consensual).</li>
+      <li>Filho de diplomata estrangeiro nascido no Brasil <strong>não</strong> é brasileiro.</li>
+      <li>Quem faz a opção da alínea c é <strong>nato</strong>, não naturalizado.</li>
+      <li>Adquirir outra nacionalidade <strong>não</strong> faz perder a brasileira (EC 131/2023).</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h3 id="modelo-de-resposta-dissertativa">Modelo de resposta dissertativa</h3>
+    <div class="fase-item"><span class="fases-num">1</span><span><strong>Resposta direta:</strong> "Clarisse está correta." / "Não é possível." / "Aplica-se a lei sul-africana."</span></div>
+    <div class="fase-item"><span class="fases-num">2</span><span><strong>Matéria e artigo:</strong> identifique o tema e o dispositivo ("trata-se de regime de bens, regido pelo art. 7, §4, da LINDB").</span></div>
+    <div class="fase-item"><span class="fases-num">3</span><span><strong>Regra aplicada aos fatos:</strong> mostre o elemento de conexão no caso ("o casal era domiciliado no Rio de Janeiro").</span></div>
+    <div class="fase-item"><span class="fases-num">4</span><span><strong>Afaste o argumento errado:</strong> explique por que a outra tese não se aplica ("o local da celebração só rege as formalidades").</span></div>
+    <div class="fase-item"><span class="fases-num">5</span><span><strong>Conclusão + fundamento legal</strong> em uma linha.</span></div>
+  </div>
+
+  <div class="card">
+    <h3 id="correcoes-da-apostila-confira-no-vademecum">Correções da apostila (confira no vademecum)</h3>
+    <table class="tabela">
+      <tr><th class="cinza">Apostila</th><th class="verde">Lei seca</th></tr>
+      <tr><td>Divórcio no exterior: art. 7, §7</td><td>LINDB art. 7, <strong>§6</strong></td></tr>
+      <tr><td>Art. 21 com dois incisos; fato no Brasil como inciso II</td><td>Três incisos; fato no Brasil = <strong>inciso III</strong>; obrigação a cumprir no Brasil = inciso II</td></tr>
+      <tr><td>Eleição de foro comentada como art. 22, II</td><td>Art. 22, <strong>III</strong></td></tr>
+      <tr><td>Lei de Migração art. 63: "que tenha sido registrado"</td><td>"que <strong>não</strong> tenha sido registrado"</td></tr>
+      <tr><td>Conselho da República: art. 89, IV</td><td>Art. 89, <strong>VII</strong></td></tr>
+      <tr><td>Perda da nacionalidade: §4º, II e III</td><td>§4º, <strong>I</strong> (punição) e <strong>II</strong> (renúncia)</td></tr>
+    </table>
+  </div>
+
+  <nav class="pager" aria-label="Navegação entre aulas">
+    <a href="aula5.html"><span class="dir">← Anterior</span><span class="nome">Aula 5 · Nacionalidade</span></a>
+    <a class="next" href="index.html"><span class="dir">Voltar →</span><span class="nome">Portal</span></a>
+  </nav>
+
+</main>
+</body>
+</html>

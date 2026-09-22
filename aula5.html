@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Aula 5 · Nacionalidade · DIP NP1</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #1e293b; --primary-hover: #0f172a; --primary-light: #f1f5f9;
+      --accent: #059669; --accent-light: #ecfdf5;
+      --danger: #dc2626; --danger-light: #fef2f2;
+      --amber: #d97706; --amber-bg: #fffbeb;
+      --rose: #e11d48; --rose-bg: #fff1f2;
+      --blue: #0284c7; --blue-bg: #f0f9ff;
+      --bg: #f8fafc; --card-bg: #ffffff;
+      --text: #0f172a; --text-muted: #64748b; --text-dim: #94a3b8;
+      --border: #e2e8f0;
+      --shadow: 0 10px 30px -5px rgba(0,0,0,0.05), 0 4px 12px -2px rgba(0,0,0,0.02);
+      --shadow-hover: 0 20px 35px -10px rgba(0,0,0,0.08);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0;
+        font-family: 'Inter', system-ui, -apple-system, sans-serif; -webkit-tap-highlight-color: transparent; }
+    body { background: var(--bg); color: var(--text); display: flex; flex-direction: column; min-height: 100vh; }
+    header { background: rgba(255,255,255,0.85); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border); padding: 12px 20px; display: flex; align-items: center;
+      justify-content: space-between; z-index: 50; height: 60px; position: sticky; top: 0; }
+    .header-brand { display: flex; align-items: center; gap: 10px; }
+    .brand-text h1 { font-size: 14px; font-weight: 700; color: var(--text); letter-spacing: -0.2px; }
+    .brand-text p { font-size: 11px; font-weight: 500; color: var(--text-muted); }
+    .header-law-link { color: var(--accent); text-decoration: none; font-weight: 700; font-size: 13px;
+      border: 1px solid var(--accent); padding: 2px 7px; border-radius: 6px; transition: all 0.15s; }
+    .header-law-link:hover { background: var(--accent); color: white; }
+    main { flex: 1; padding: 32px 20px; max-width: 860px; margin: 0 auto; width: 100%; }
+    .section-title { font-size: 11px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.08em; color: var(--text-muted); margin-bottom: 16px; }
+    .badge-row { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 12px; }
+    .badge { display: flex; align-items: center; gap: 6px; padding: 7px 14px; border-radius: 99px;
+      font-size: 12px; font-weight: 600; border: 1px solid var(--border); }
+    .badge.peca { background: var(--blue-bg); color: var(--blue); border-color: var(--blue); }
+    .badge.disc { background: var(--amber-bg); color: var(--amber); border-color: var(--amber); }
+    .badge.total { background: var(--accent-light); color: var(--accent); border-color: var(--accent); }
+    .card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 16px; padding: 24px; margin-bottom: 20px; }
+    .card h3 { font-size: 14px; font-weight: 700; color: var(--accent); padding-bottom: 10px; margin-bottom: 14px; border-bottom: 2px solid var(--accent-light); }
+    .lista { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+    .lista li { font-size: 13.5px; color: var(--text); line-height: 1.6; padding-left: 16px; position: relative; }
+    .lista li::before { content: '›'; position: absolute; left: 0; color: var(--accent); font-weight: 700; }
+    .lista li strong { color: var(--primary); }
+    .lista.sub { margin-top: 6px; margin-left: 16px; }
+    .lista.sub li::before { content: '–'; color: var(--text-muted); }
+    .tabela { width: 100%; border-collapse: collapse; font-size: 12.5px; margin: 12px 0; }
+    .tabela th { font-weight: 700; padding: 9px 12px; text-align: left; border: 1px solid var(--border); }
+    .tabela th.verde { background: var(--accent-light); color: var(--accent); }
+    .tabela th.azul { background: var(--blue-bg); color: var(--blue); }
+    .tabela th.cinza { background: var(--primary-light); color: var(--text-muted); }
+    .tabela td { padding: 7px 12px; border: 1px solid var(--border); vertical-align: top; line-height: 1.5; font-size: 12.5px; }
+    .tabela tr:nth-child(even) td { background: var(--bg); }
+    .dica { background: var(--amber-bg); border: 1.5px solid var(--amber); border-radius: 10px; padding: 14px 18px; margin-top: 16px; }
+    .dica strong { color: var(--amber); font-size: 12px; text-transform: uppercase; letter-spacing: .06em; display: block; margin-bottom: 8px; }
+    .dica ul { list-style: none; display: flex; flex-direction: column; gap: 5px; padding: 0; }
+    .dica li { font-size: 13px; color: var(--text); padding-left: 14px; position: relative; line-height: 1.5; }
+    .dica li::before { content: '★'; position: absolute; left: 0; color: var(--amber); font-size: 10px; top: 2px; }
+    .questao { background: var(--card-bg); border: 2px solid var(--primary); border-radius: 16px; padding: 24px; margin-bottom: 20px; }
+    .q-num { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .1em;
+      color: var(--primary); background: var(--primary-light); padding: 3px 8px; border-radius: 5px; display: inline-block; margin-bottom: 12px; }
+    .enunciado { font-size: 13.5px; color: var(--text); line-height: 1.7; background: var(--primary-light); border-radius: 8px; padding: 14px 16px; margin-bottom: 18px; }
+    .resp-titulo { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; color: var(--accent); margin-bottom: 10px; }
+    .resp p { font-size: 13.5px; color: var(--text); line-height: 1.7; margin-bottom: 8px; }
+    .fundamento { background: var(--accent-light); border: 1px solid var(--accent); border-radius: 8px; padding: 10px 14px; margin-top: 14px; font-size: 12px; color: var(--accent); font-weight: 600; line-height: 1.6; }
+    .back-link { font-size: 12px; font-weight: 600; color: var(--accent); text-decoration: none; border: 1px solid var(--accent); padding: 4px 10px; border-radius: 6px; transition: all .15s; }
+    .back-link:hover { background: var(--accent); color: #fff; }
+    .caso { background: var(--card-bg); border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; margin-bottom: 12px; }
+    .caso-titulo { font-size: 12px; font-weight: 700; color: var(--primary); margin-bottom: 6px; }
+    .caso p { font-size: 13px; color: var(--text); line-height: 1.6; }
+    .caso .veredicto { font-size: 12px; font-weight: 700; color: var(--accent); margin-top: 6px; }
+
+    /* ── navegação interna (sumário + paginação) — usa só as variáveis do template ── */
+    html { scroll-behavior: smooth; }
+    [id] { scroll-margin-top: 76px; }
+    .card, .questao { overflow-x: auto; }
+    .toc { background: var(--card-bg); border: 1px solid var(--border); border-radius: 16px;
+      padding: 16px 20px; margin-bottom: 24px; }
+    .toc-title { font-size: 11px; font-weight: 700; color: var(--text-muted); margin-bottom: 10px; }
+    .toc ol { list-style: none; display: flex; flex-wrap: wrap; gap: 6px; }
+    .toc a { display: inline-block; font-size: 12px; font-weight: 600; color: var(--primary);
+      text-decoration: none; background: var(--primary-light); border: 1px solid var(--border);
+      padding: 5px 11px; border-radius: 99px; transition: all .15s; }
+    .toc a:hover, .toc a:focus-visible { border-color: var(--accent); color: var(--accent); background: var(--accent-light); }
+    .pager { display: flex; gap: 12px; margin-top: 32px; }
+    .pager a { flex: 1; display: block; text-decoration: none; background: var(--card-bg);
+      border: 1px solid var(--border); border-radius: 12px; padding: 12px 16px; transition: border-color .15s; }
+    .pager a:hover, .pager a:focus-visible { border-color: var(--accent); }
+    .pager .dir { font-size: 11px; font-weight: 600; color: var(--text-muted); display: block; }
+    .pager .nome { font-size: 13px; font-weight: 700; color: var(--primary); }
+    .pager a.next { text-align: right; }
+    a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+    @media (max-width: 600px) { .pager { flex-direction: column; } .pager a.next { text-align: left; } }
+    @media print { header, .toc, .pager { display: none; } .card, .questao { break-inside: avoid; } body { background: #fff; } }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="header-brand">
+    <svg width="26" height="26" viewBox="0 0 24 24" fill="none"
+         stroke="var(--accent)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="12" cy="12" r="10"/>
+      <line x1="2" y1="12" x2="22" y2="12"/>
+      <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+    </svg>
+    <div class="brand-text">
+      <h1>Aula 5 · Nacionalidade ·
+        <a href="https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm"
+           target="_blank" rel="noopener noreferrer" class="header-law-link">CF/88 ↗</a>
+      </h1>
+      <p>André L. da Silva · Dir. Internacional Privado · UNIP NP1 2026</p>
+    </div>
+  </div>
+  <a href="index.html" class="back-link">← Portal</a>
+</header>
+
+<main>
+
+  <nav class="toc" aria-label="Sumário da página">
+    <p class="toc-title">Nesta página</p>
+    <ol>
+      <li><a href="#conceito-polipatridia-e-apatridia">Conceito, Polipatridia e Apatridia</a></li>
+      <li><a href="#especies-de-nacionalidade">Espécies de Nacionalidade</a></li>
+      <li><a href="#brasileiros-natos-cf-art-12-i">Brasileiros Natos · CF art. 12, I</a></li>
+      <li><a href="#naturalizacao-cf-art-12-ii-lei-13-445-2017">Naturalização · CF art. 12, II + Lei 13.445/2017</a></li>
+      <li><a href="#natos-naturalizados-diferencas">Natos × Naturalizados · Diferenças</a></li>
+      <li><a href="#perda-da-nacionalidade-cf-art-12-4o-ec-131-2023">Perda da Nacionalidade · CF art. 12, §4º</a></li>
+      <li><a href="#estatuto-da-igualdade-brasilportugal">Estatuto da Igualdade Brasil–Portugal</a></li>
+      <li><a href="#exercicios">Exercícios</a></li>
+    </ol>
+  </nav>
+
+  <p class="section-title">Resumo · Aula 5</p>
+
+  <div class="card">
+    <h3 id="conceito-polipatridia-e-apatridia">Conceito, Polipatridia e Apatridia</h3>
+    <ul class="lista">
+      <li><strong>Nacionalidade:</strong> vínculo <strong>jurídico-político</strong> que liga o indivíduo a um Estado, do qual decorrem direitos e obrigações. Tem status de <strong>direito humano</strong>: ninguém pode ser arbitrariamente privado dela (Declaração Universal dos Direitos Humanos).</li>
+      <li><strong>Polipátrida:</strong> tem mais de uma nacionalidade. <strong>Apátrida:</strong> não tem nenhuma. O DIP busca evitar as duas situações.</li>
+      <li><strong>Nacionalidade efetiva</strong> (Convenção da Haia): o polipátrida só é protegido frente a terceiros Estados pelo Estado com o qual tenha vínculo efetivo mais estreito.</li>
+      <li><strong>Tratados contra a apatridia:</strong> Protocolo de 1930, Convenção sobre o Estatuto dos Apátridas (1954) e Convenção para a Redução dos Casos de Apatridia (1961).</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h3 id="especies-de-nacionalidade">Espécies de Nacionalidade</h3>
+    <table class="tabela">
+      <tr><th>Espécie</th><th>Como surge</th><th>Critérios / forma</th></tr>
+      <tr><td><strong>Originária (primária)</strong></td><td>Fato natural — o nascimento; independe da vontade</td><td><em>Jus soli</em> (território) e <em>jus sanguinis</em> (filiação)</td></tr>
+      <tr><td><strong>Adquirida (derivada, secundária)</strong></td><td>Ato de vontade do indivíduo + ato do Estado</td><td>No Brasil, <strong>só por naturalização</strong> (Lei 13.445/2017)</td></tr>
+    </table>
+    <div class="dica">
+      <strong>Exemplos da aula</strong>
+      <ul>
+        <li>Filho de casal norte-americano (não a serviço dos EUA) nascido no Brasil → brasileiro nato (<em>jus soli</em>).</li>
+        <li>Filho de casal italiano nascido no Brasil → brasileiro nato pelo <em>jus soli</em>, ainda que a Itália adote o <em>jus sanguinis</em>.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3 id="brasileiros-natos-cf-art-12-i">Brasileiros Natos — CF art. 12, I</h3>
+    <table class="tabela">
+      <tr><th>Alínea</th><th>Onde nasceu</th><th>Requisito</th><th>Critério</th></tr>
+      <tr><td><strong>a</strong></td><td>No Brasil</td><td>Ainda que de pais estrangeiros, <strong>desde que não estejam a serviço de seu país</strong></td><td><em>Jus soli</em></td></tr>
+      <tr><td><strong>b</strong></td><td>No exterior</td><td>Pai ou mãe brasileiro <strong>a serviço do Brasil</strong></td><td><em>Jus sanguinis</em> + serviço</td></tr>
+      <tr><td><strong>c</strong></td><td>No exterior</td><td>Pai ou mãe brasileiro (não a serviço) + <strong>registro em repartição brasileira</strong> <em>OU</em> <strong>vir residir no Brasil e optar</strong>, a qualquer tempo, após a maioridade</td><td>Misto: <em>jus sanguinis</em> + registro ou vontade</td></tr>
+    </table>
+    <ul class="lista" style="margin-top:12px;">
+      <li><strong>EC 54/2007</strong> fixou as duas vias da alínea c: registro em repartição brasileira competente <em>ou</em> residência no Brasil + opção. Basta <strong>um</strong> dos pais ser brasileiro.</li>
+      <li><strong>Opção de nacionalidade:</strong> feita por <strong>ação judicial na Justiça Federal</strong> (CF art. 109, X). Lei de Migração art. 63: o filho de pai ou mãe brasileiro nascido no exterior e que <strong>não</strong> tenha sido registrado em repartição consular pode, a qualquer tempo, promover ação de opção.</li>
+    </ul>
+    <div class="dica">
+      <strong>Atenção</strong>
+      <ul>
+        <li>Pais estrangeiros <strong>a serviço do país deles</strong> → filho nascido no Brasil <strong>não é nato</strong> (ex.: filho de diplomatas estrangeiros).</li>
+        <li>Pai/mãe brasileiro <strong>a serviço do Brasil</strong> → filho nascido no exterior <strong>é nato</strong> (alínea b), sem registro nem opção.</li>
+        <li>Quem opta pela alínea c vira brasileiro <strong>nato</strong>, não naturalizado.</li>
+        <li><strong>Correção da apostila:</strong> ela transcreve o art. 63 como "que tenha sido registrado"; o texto legal diz "que <strong>não</strong> tenha sido registrado".</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3 id="naturalizacao-cf-art-12-ii-lei-13-445-2017">Naturalização — CF art. 12, II + Lei 13.445/2017</h3>
+    <ul class="lista">
+      <li><strong>Única forma</strong> de nacionalidade derivada no Brasil. Pedido ao órgão do Poder Executivo; cabe recurso da denegação (art. 71).</li>
+      <li>Pode pedir tradução ou adaptação do nome ao português.</li>
+      <li>Produz efeitos após a <strong>publicação no Diário Oficial</strong>. Em até <strong>1 ano</strong>, o naturalizado deve se cadastrar na Justiça Eleitoral.</li>
+      <li><strong>Espécies (art. 64):</strong> ordinária, extraordinária, especial e provisória.</li>
+    </ul>
+    <table class="tabela">
+      <tr><th>Espécie</th><th>Requisitos principais</th><th>Natureza do ato</th></tr>
+      <tr><td><strong>Ordinária</strong> (art. 65)</td><td>Capacidade civil; residência de <strong>4 anos</strong>; comunicar-se em português; sem condenação penal ou reabilitado</td><td>Discricionário</td></tr>
+      <tr><td>Ordinária reduzida (art. 66)</td><td>Residência de <strong>1 ano</strong> se: filho brasileiro; cônjuge/companheiro brasileiro (sem separação); serviço relevante ao Brasil; capacidade profissional, científica ou artística</td><td>Discricionário</td></tr>
+      <tr><td><strong>Lusófonos</strong> (CF art. 12, II, a)</td><td>Residência por <strong>1 ano ininterrupto</strong> + idoneidade moral</td><td>Discricionário</td></tr>
+      <tr><td><strong>Extraordinária</strong> (CF art. 12, II, b; art. 67)</td><td>Residência <strong>há mais de 15 anos ininterruptos</strong>, sem condenação penal, e requerimento</td><td><strong>Vinculado</strong> — é direito do requerente</td></tr>
+      <tr><td><strong>Especial</strong> (art. 68)</td><td>Cônjuge/companheiro <strong>há mais de 5 anos</strong> de integrante do Serviço Exterior Brasileiro ou de pessoa a serviço do Brasil no exterior; <em>ou</em> empregado em missão diplomática/repartição consular do Brasil <strong>por mais de 10 anos</strong> ininterruptos. Mais: capacidade civil, português, sem condenação</td><td>Discricionário</td></tr>
+      <tr><td><strong>Provisória</strong> (art. 70)</td><td>Criança ou adolescente que fixou residência no Brasil <strong>antes dos 10 anos</strong>; pedido pelo representante legal. Vira definitiva se requerida em até <strong>2 anos após a maioridade</strong></td><td>—</td></tr>
+    </table>
+    <div class="dica">
+      <strong>Pegadinhas</strong>
+      <ul>
+        <li>Naturalização em regra é <strong>discricionária</strong>; a <strong>extraordinária é vinculada</strong>.</li>
+        <li>O prazo reduzido de 1 ano do art. 66 vale só para as quatro hipóteses da lei (filho brasileiro, cônjuge/companheiro brasileiro, serviço relevante, capacidade profissional/científica/artística).</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3 id="natos-naturalizados-diferencas">Natos × Naturalizados — Diferenças</h3>
+    <ul class="lista">
+      <li><strong>Regra (CF art. 12, §2º):</strong> a lei não pode distinguir natos e naturalizados, salvo nos casos previstos na própria Constituição.</li>
+      <li><strong>Cargos privativos de nato (art. 12, §3º):</strong> Presidente e Vice-Presidente da República; Presidente da Câmara; Presidente do Senado; Ministro do STF; carreira diplomática; oficial das Forças Armadas; Ministro de Estado da Defesa.</li>
+      <li><strong>Lógica:</strong> os 4 primeiros estão na linha sucessória da Presidência; os demais, por segurança nacional.</li>
+      <li><strong>Conselho da República:</strong> as seis vagas de cidadãos são de brasileiros natos (CF art. 89, VII).</li>
+      <li><strong>Empresa jornalística e de radiodifusão:</strong> naturalizado só após <strong>10 anos</strong> de naturalização (CF art. 222).</li>
+      <li><strong>Extradição (CF art. 5º, LI):</strong> nato <strong>nunca</strong>; naturalizado, por <strong>crime comum anterior</strong> à naturalização ou por <strong>tráfico ilícito de entorpecentes</strong> (antes ou depois).</li>
+    </ul>
+    <div class="dica">
+      <strong>Correção da apostila</strong>
+      <ul>
+        <li>A apostila cita o art. 89, <strong>IV</strong> para o Conselho da República; o inciso correto é o <strong>VII</strong> (o IV trata dos líderes da Câmara).</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3 id="perda-da-nacionalidade-cf-art-12-4o-ec-131-2023">Perda da Nacionalidade — CF art. 12, §4º (EC 131/2023)</h3>
+    <table class="tabela">
+      <tr><th>Inciso</th><th>Antes da EC 131/2023</th><th>Hoje</th></tr>
+      <tr><td><strong>I — perda-punição</strong> (só naturalizado)</td><td>Cancelamento da naturalização por "atividade nociva ao interesse nacional"</td><td>Cancelamento por sentença judicial (Justiça Federal) por <strong>fraude no processo de naturalização</strong> ou <strong>atentado à ordem constitucional e ao Estado Democrático</strong></td></tr>
+      <tr><td><strong>II — perda-renúncia</strong> (nato ou naturalizado)</td><td>Perda automática por adquirir outra nacionalidade (salvo exceções)</td><td>Somente por <strong>pedido expresso</strong> à autoridade brasileira, salvo se gerar <strong>apatridia</strong></td></tr>
+    </table>
+    <ul class="lista" style="margin-top:12px;">
+      <li><strong>§5º (novo):</strong> a renúncia não impede a <strong>reaquisição</strong> da nacionalidade brasileira, nos termos da lei.</li>
+      <li><strong>Resultado:</strong> o Brasil admite <strong>dupla ou múltipla nacionalidade</strong>; ninguém perde a brasileira só por naturalizar-se em outro país. Verifique sempre as regras do outro país.</li>
+    </ul>
+    <div class="dica">
+      <strong>Correção da apostila</strong>
+      <ul>
+        <li>A apostila fala em "§4º, II e III"; o §4º só tem dois incisos: <strong>I (punição)</strong> e <strong>II (renúncia)</strong>.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3 id="estatuto-da-igualdade-brasilportugal">Estatuto da Igualdade Brasil–Portugal</h3>
+    <ul class="lista">
+      <li>Origem em tratado de 1971; hoje regulado pelo <strong>Tratado de Amizade, Cooperação e Consulta</strong> (2000).</li>
+      <li>Brasileiros em Portugal e portugueses no Brasil gozam dos mesmos direitos e deveres dos nacionais, <strong>sem perder a nacionalidade de origem</strong>.</li>
+      <li>Não abrange direitos privativos de natos. Base constitucional: CF art. 12, §1º (portugueses com residência permanente, havendo reciprocidade).</li>
+    </ul>
+  </div>
+
+  <p class="section-title" id="exercicios">Atividade da Aula 5 · 15 AC + 15 ES · manuscrita</p>
+
+  <div class="questao">
+    <span class="q-num">Classifique conforme o art. 12 da CF</span>
+    <div class="enunciado">
+      <strong>Caso 1 — Pierre:</strong> nasceu em Paris; pai francês e mãe brasileira, que estava de férias na França. Nascimento não registrado em embaixada ou consulado brasileiro.
+      <br><br><strong>Caso 2 — Robert:</strong> filho de John e Mary, diplomatas dos EUA na embaixada americana em Brasília; nasceu durante a missão no Brasil.
+      <br><br><strong>Caso 3 — Sofia:</strong> nasceu em Buenos Aires; pai brasileiro trabalhava em empresa privada na Argentina. Mudou-se para o Brasil aos 10 anos; hoje tem 22.
+      <br><br><strong>Caso 4 — Akio:</strong> japonês, veio morar no Brasil, cumpriu os requisitos legais de tempo de residência e idoneidade e pediu a nacionalidade brasileira.
+      <br><br>A) Pierre é nato, naturalizado ou estrangeiro? (jus sanguinis) · B) [repetida na apostila — responda sobre Robert] · C) Sofia pode ser nata? O que precisa fazer? · D) Qual a classificação de Akio?
+    </div>
+    <div class="resp">
+      <p class="resp-titulo">Resposta</p>
+
+      <div class="caso">
+        <p class="caso-titulo">A) Pierre</p>
+        <p>Nasceu no exterior de mãe brasileira que <strong>não estava a serviço do Brasil</strong> (férias) → não se aplica a alínea b. Pela alínea c, o <em>jus sanguinis</em> exige ainda <strong>registro consular</strong> ou <strong>residência no Brasil + opção após a maioridade</strong>. Nada disso ocorreu → hoje é <strong>estrangeiro</strong> (francês). Pode tornar-se <strong>brasileiro nato</strong> se for registrado em repartição brasileira ou se vier residir no Brasil e optar.</p>
+        <p class="veredicto">Estrangeiro por ora — potencialmente nato (CF art. 12, I, c).</p>
+      </div>
+
+      <div class="caso">
+        <p class="caso-titulo">B) Robert</p>
+        <p>Nasceu em Brasília, mas a alínea a exclui os filhos de pais estrangeiros <strong>a serviço de seu país</strong>. John e Mary são diplomatas dos EUA em missão → exceção incide. Também não há <em>jus sanguinis</em> brasileiro.</p>
+        <p class="veredicto">Estrangeiro (norte-americano) — exceção da CF art. 12, I, a.</p>
+      </div>
+
+      <div class="caso">
+        <p class="caso-titulo">C) Sofia</p>
+        <p>Nasceu no exterior de pai brasileiro <strong>não a serviço</strong> do Brasil e sem registro consular → alínea c, segunda via. Já <strong>reside no Brasil</strong> e já é <strong>maior</strong>: falta apenas <strong>optar</strong>, por <strong>ação de opção de nacionalidade na Justiça Federal</strong> (CF art. 109, X; Lei 13.445/2017, art. 63). A opção pode ser feita a qualquer tempo e a torna <strong>brasileira nata</strong>.</p>
+        <p class="veredicto">Sim — brasileira nata após a opção (CF art. 12, I, c).</p>
+      </div>
+
+      <div class="caso">
+        <p class="caso-titulo">D) Akio</p>
+        <p>Estrangeiro que requereu a nacionalidade → <strong>naturalização</strong>, única forma de nacionalidade derivada. O enunciado não diz o prazo: com <strong>4 anos</strong> de residência, é <strong>ordinária</strong> (Lei 13.445/2017, art. 65 — ato discricionário); com <strong>mais de 15 anos</strong> ininterruptos e sem condenação, é <strong>extraordinária</strong> (CF art. 12, II, b — ato vinculado). Efeitos a partir da publicação no Diário Oficial. Terá quase todos os direitos do nato, salvo os cargos do art. 12, §3º, e poderá ser extraditado nas hipóteses do art. 5º, LI.</p>
+        <p class="veredicto">Brasileiro naturalizado (nacionalidade secundária).</p>
+      </div>
+
+      <div class="fundamento">Fundamento: CF art. 12, I, a/b/c; II, a/b; §§2º e 3º; art. 5º, LI; art. 109, X; Lei 13.445/2017, arts. 63 a 70.</div>
+    </div>
+  </div>
+
+  <div class="badge-row">
+    <span class="badge peca">CF art. 12</span>
+    <span class="badge disc">Natos × Naturalizados</span>
+    <span class="badge total">EC 131/2023</span>
+  </div>
+
+  <nav class="pager" aria-label="Navegação entre aulas">
+    <a href="aula4.html"><span class="dir">← Anterior</span><span class="nome">Aula 4 · Cooperação e HSE</span></a>
+    <a class="next" href="cola.html"><span class="dir">Próxima →</span><span class="nome">Cola de véspera</span></a>
+  </nav>
+
+</main>
+</body>
+</html>
